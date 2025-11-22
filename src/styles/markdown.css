@@ -1,15 +1,16 @@
 .markdown-with-comments {
   display: flex;
   gap: 0;
-  max-width: 1400px;
-  margin: 0 auto;
+  min-height: 100vh;
 }
 
 .markdown-container {
   flex: 1;
   max-width: 900px;
   padding: 2rem;
+  padding-right: 320px; /* コメントサイドバー分の余白 */
   position: relative;
+  margin: 0 auto;
 }
 
 .comments-sidebar {
@@ -19,8 +20,9 @@
   background: #f6f8fa;
   padding: 1rem;
   height: 100vh;
-  position: sticky;
+  position: fixed;
   top: 0;
+  right: 0;
   overflow-y: auto;
 }
 
@@ -280,7 +282,7 @@
 
 /* 選択範囲のハイライト */
 .selection-highlight {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(0, 0, 0, 0.1);
   border-radius: 2px;
 }
 
