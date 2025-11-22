@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import ReactMarkdown, { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -11,6 +11,8 @@ interface MarkdownPreviewProps {
   content: string;
   filename: string;
   filePath?: string;
+  comments: Comment[];
+  onCommentsChange: (comments: Comment[]) => void;
 }
 
 // 各要素に data-line-start を付与するコンポーネント群
@@ -65,9 +67,8 @@ const componentsWithLinePosition: Components = {
   ),
 };
 
-export const MarkdownPreview = ({ content, filename, filePath }: MarkdownPreviewProps) => {
+export const MarkdownPreview = ({ content, filename, filePath, comments, onCommentsChange }: MarkdownPreviewProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
 
   const handleSubmitComment = (comment: string, selectedText: string, startLine: number, endLine: number) => {
     const newComment: Comment = {
@@ -79,15 +80,15 @@ export const MarkdownPreview = ({ content, filename, filePath }: MarkdownPreview
       createdAt: new Date(),
     };
 
-    setComments((prev) => [...prev, newComment]);
+    onCommentsChange([...comments, newComment]);
   };
 
   const handleDeleteComment = (id: string) => {
-    setComments((prev) => prev.filter((c) => c.id !== id));
+    onCommentsChange(comments.filter((c) => c.id !== id));
   };
 
   const handleDeleteAllComments = () => {
-    setComments([]);
+    onCommentsChange([]);
   };
 
   return (

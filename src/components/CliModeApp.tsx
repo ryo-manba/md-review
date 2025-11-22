@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { useMarkdown } from '../hooks/useMarkdown';
 import { MarkdownPreview } from './MarkdownPreview';
 import { ErrorDisplay } from './ErrorDisplay';
+import { Comment } from './CommentList';
 
 export const CliModeApp = () => {
   const { content, filename, loading, error } = useMarkdown();
+  const [comments, setComments] = useState<Comment[]>([]);
 
   if (loading) {
     return (
@@ -30,5 +33,12 @@ export const CliModeApp = () => {
     );
   }
 
-  return <MarkdownPreview content={content} filename={filename} />;
+  return (
+    <MarkdownPreview
+      content={content}
+      filename={filename}
+      comments={comments}
+      onCommentsChange={setComments}
+    />
+  );
 };

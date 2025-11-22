@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useFileList } from '../hooks/useFileList';
 import { useMarkdown } from '../hooks/useMarkdown';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import { FileTree } from './FileTree';
 import { MarkdownPreview } from './MarkdownPreview';
 import { ErrorDisplay } from './ErrorDisplay';
+import { Comment } from './CommentList';
 import '../styles/devmode.css';
 
 export const DevModeApp = () => {
@@ -11,6 +13,7 @@ export const DevModeApp = () => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [focusSearch, setFocusSearch] = useState<boolean>(false);
+  const [commentsMap, setCommentsMap] = useLocalStorage<Record<string, Comment[]>>('md-preview-comments', {});
   const { content, filename, loading: markdownLoading, error: markdownError } = useMarkdown(selectedFile);
 
   const handleSearchClick = () => {
@@ -96,6 +99,11 @@ export const DevModeApp = () => {
             content={content}
             filename={filename}
             filePath={selectedFile || filename}
+            comments={commentsMap[selectedFile || filename] || []}
+            onCommentsChange={(comments) => {
+              const key = selectedFile || filename;
+              setCommentsMap((prev) => ({ ...prev, [key]: comments }));
+            }}
           />
         ) : (
           <div className="dev-placeholder">
