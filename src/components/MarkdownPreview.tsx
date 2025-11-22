@@ -4,7 +4,6 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github.css';
 import '../styles/markdown.css';
-import { useSelectionLineRange } from '../hooks/useSelectionLineRange';
 import { SelectionPopover } from './SelectionPopover';
 import { CommentList, Comment } from './CommentList';
 
@@ -68,7 +67,6 @@ const componentsWithLinePosition: Components = {
 
 export const MarkdownPreview = ({ content, filename, filePath }: MarkdownPreviewProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
-  const lineRange = useSelectionLineRange(contentRef);
   const [comments, setComments] = useState<Comment[]>([]);
 
   const handleSubmitComment = (comment: string, selectedText: string, startLine: number, endLine: number) => {
@@ -96,16 +94,7 @@ export const MarkdownPreview = ({ content, filename, filePath }: MarkdownPreview
     <div className="markdown-with-comments">
       <div className="markdown-container">
         <header className="markdown-header">
-          <h1>
-            {filename}
-            {lineRange && (
-              <span className="line-range">
-                {lineRange.startLine === lineRange.endLine
-                  ? ` (${lineRange.startLine})`
-                  : ` (${lineRange.startLine}-${lineRange.endLine})`}
-              </span>
-            )}
-          </h1>
+          <h1>{filename}</h1>
         </header>
         <div className="markdown-content" ref={contentRef}>
           <ReactMarkdown
