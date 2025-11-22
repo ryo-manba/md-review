@@ -109,7 +109,9 @@ app.get('/api/markdown/:path{.+}', async (c) => {
   }
 });
 
+const SERVER_READY_MESSAGE = 'md-review server started';
 console.log(`API Server running on http://localhost:${PORT}`);
+console.log(SERVER_READY_MESSAGE);
 
 serve({
   fetch: app.fetch,

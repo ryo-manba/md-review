@@ -1,30 +1,31 @@
 {
-  "name": "md-preview",
+  "name": "md-review",
   "version": "0.0.1",
-  "description": "Preview Markdown files in your browser",
+  "description": "Review Markdown files in your browser with inline comments",
   "type": "module",
   "bin": {
-    "md-preview": "./bin/md-preview.js"
+    "md-review": "./bin/md-review.js"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently 'pnpm run server' 'pnpm run client'",
+    "client": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "server": "node server/index.js"
   },
   "keywords": [
     "markdown",
-    "preview",
+    "review",
+    "comment",
     "cli"
   ],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "@hono/node-server": "^1.19.6",
-    "chalk": "^5.6.2",
-    "commander": "^14.0.2",
     "highlight.js": "^11.11.1",
     "hono": "^4.10.6",
+    "mri": "^1.2.0",
     "open": "^11.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -33,10 +34,12 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@types/hast": "^3.0.4",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.2.1",
     "typescript": "^5.6.3",
     "vite": "^6.0.3"
   }

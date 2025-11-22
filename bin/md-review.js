@@ -1,79 +1,154 @@
 #!/usr/bin/env node
 
-import { Command } from 'commander';
 import { spawn } from 'child_process';
 import { resolve, dirname } from 'path';
-import { existsSync } from 'fs';
-import open from 'open';
-import chalk from 'chalk';
+import { existsSync, readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
+import mri from 'mri';
 
-// get __dirname using ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const packageRoot = resolve(__dirname, '..');
 
-const program = new Command();
+const pkg = JSON.parse(readFileSync(resolve(packageRoot, 'package.json'), 'utf-8'));
 
-program
-  .name('md-review')
-  .description('Review and annotate Markdown files with comments')
-  .version('0.0.1')
-  .argument('<file>', 'Path to the markdown file')
-  .option('-p, --port <port>', 'Vite server port', '6060')
-  .option('--api-port <port>', 'API server port', '3030')
-  .option('--no-open', 'Do not open browser automatically')
-  .action((file, options) => {
-    // validate file path
-    const filePath = resolve(file);
+const SERVER_READY_MESSAGE = 'md-review server started';
 
-    if (!existsSync(filePath)) {
-      console.error(chalk.red(`Error: File not found: ${filePath}`));
-      process.exit(1);
-    }
+// Parse arguments
+const args = mri(process.argv.slice(2), {
+  alias: {
+    p: 'port',
+    h: 'help',
+    v: 'version'
+  },
+  default: {
+    port: '6060',
+    'api-port': '3030',
+    open: true
+  },
+  boolean: ['help', 'version', 'open']
+});
 
-    if (!filePath.endsWith('.md')) {
-      console.warn(chalk.yellow('Warning: File does not have .md extension'));
-    }
+// Help message
+if (args.help) {
+  console.log(`
+md-review - Review and annotate Markdown files with comments
 
-    console.log(chalk.blue('Starting md-review...'));
-    console.log(chalk.gray(`File: ${filePath}`));
-    console.log(chalk.gray(`API Port: ${options.apiPort}`));
-    console.log(chalk.gray(`Vite Port: ${options.port}`));
+Usage:
+  md-review [options]              Start in dev mode (browse all .md files)
+  md-review <file> [options]       Preview a specific markdown file
 
-    // set environment variables
-    process.env.MARKDOWN_FILE_PATH = filePath;
-    process.env.API_PORT = options.apiPort;
-    process.env.VITE_PORT = options.port;
+Options:
+  -p, --port <port>      Vite server port (default: 6060)
+  --api-port <port>      API server port (default: 3030)
+  --no-open              Do not open browser automatically
+  -h, --help             Show this help message
+  -v, --version          Show version number
 
-    // start API server and Vite server
-    const apiServer = spawn('node', ['server/index.js'], {
-      cwd: resolve(__dirname, '..'),
+Examples:
+  md-review                        Start dev mode in current directory
+  md-review README.md              Preview README.md
+  md-review docs/guide.md --port 8080
+`);
+  process.exit(0);
+}
+
+// Version
+if (args.version) {
+  console.log(pkg.version);
+  process.exit(0);
+}
+
+const file = args._[0];
+const port = args.port;
+const apiPort = args['api-port'];
+const shouldOpen = args.open;
+
+// Set environment variables
+process.env.API_PORT = apiPort;
+process.env.VITE_PORT = port;
+
+// If file is specified, validate it
+if (file) {
+  const filePath = resolve(file);
+
+  if (!existsSync(filePath)) {
+    console.error(`Error: File not found: ${filePath}`);
+    process.exit(1);
+  }
+
+  if (!filePath.endsWith('.md')) {
+    console.warn('Warning: File does not have .md extension');
+  }
+
+  process.env.MARKDOWN_FILE_PATH = filePath;
+  console.log(`File: ${filePath}`);
+} else {
+  // Dev mode - browse all markdown files
+  process.env.BASE_DIR = process.cwd();
+  console.log(`Directory: ${process.cwd()}`);
+}
+
+console.log('Starting md-review...');
+console.log(`   API Port: ${apiPort}`);
+console.log(`   Vite Port: ${port}`);
+
+// Start API server
+const apiProcess = spawn('node', ['server/index.js'], {
+  cwd: packageRoot,
+  stdio: ['inherit', 'pipe', 'inherit'],
+  env: process.env
+});
+
+let viteProcess = null;
+let serverReady = false;
+
+// Wait for API server to be ready before starting Vite
+apiProcess.stdout.on('data', (data) => {
+  process.stdout.write(data);
+  const output = data.toString();
+
+  if (!serverReady && output.includes(SERVER_READY_MESSAGE)) {
+    serverReady = true;
+    console.log('Starting Vite dev server...');
+
+    viteProcess = spawn('node', [
+      'node_modules/vite/bin/vite.js',
+      '--port', port,
+      ...(shouldOpen ? ['--open'] : [])
+    ], {
+      cwd: packageRoot,
       stdio: 'inherit',
       env: process.env
     });
 
-    const viteServer = spawn('pnpm', ['run', 'dev', '--', '--port', options.port], {
-      cwd: resolve(__dirname, '..'),
-      stdio: 'inherit',
-      shell: true
+    viteProcess.on('error', (err) => {
+      console.error('Vite server error:', err.message);
     });
+  }
+});
 
-    // open browser
-    if (options.open) {
-      setTimeout(() => {
-        const url = `http://localhost:${options.port}`;
-        console.log(chalk.green(`Opening browser at ${url}`));
-        open(url);
-      }, 2000);
-    }
+// Handle graceful shutdown
+const shutdown = () => {
+  console.log('\nShutting down...');
+  apiProcess.kill('SIGINT');
+  viteProcess?.kill('SIGINT');
+  process.exit(0);
+};
 
-    // clean up
-    process.on('SIGINT', () => {
-      console.log(chalk.yellow('\nShutting down servers...'));
-      apiServer.kill();
-      viteServer.kill();
-      process.exit(0);
-    });
-  });
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
 
-program.parse();
+// Handle API server exit
+apiProcess.on('exit', (code) => {
+  if (code !== 0 && code !== null) {
+    console.error(`API server exited with code ${code}`);
+  }
+  viteProcess?.kill('SIGINT');
+  process.exit(code || 0);
+});
+
+apiProcess.on('error', (err) => {
+  console.error('Failed to start API server:', err.message);
+  process.exit(1);
+});
