@@ -16,7 +16,6 @@ export const DevModeApp = () => {
   const handleSearchClick = () => {
     setSidebarOpen(true);
     setFocusSearch(true);
-    // Reset focus flag after a short delay
     setTimeout(() => setFocusSearch(false), 100);
   };
 
@@ -93,7 +92,11 @@ export const DevModeApp = () => {
         ) : markdownError ? (
           <ErrorDisplay error={markdownError} />
         ) : content && filename ? (
-          <MarkdownPreview content={content} filename={filename} />
+          <MarkdownPreview
+            content={content}
+            filename={filename}
+            filePath={selectedFile || filename}
+          />
         ) : (
           <div className="dev-placeholder">
             <p>No content available</p>
