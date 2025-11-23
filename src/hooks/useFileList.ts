@@ -12,7 +12,7 @@ interface FileListData {
   error: Error | null;
 }
 
-const API_URL = 'http://localhost:3030/api/files';
+const API_URL = '/api/files';
 
 export const useFileList = (): FileListData => {
   const [files, setFiles] = useState<FileInfo[]>([]);

@@ -9,7 +9,7 @@ function App() {
     // Detect mode by checking if /api/files endpoint is available
     const detectMode = async () => {
       try {
-        const response = await fetch('http://localhost:3030/api/files');
+        const response = await fetch('/api/files');
         if (response.ok) {
           setMode('dev');
         } else {

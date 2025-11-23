@@ -1,6 +1,5 @@
 // server/index.js
 import { Hono } from 'hono';
-import { cors } from 'hono/cors';
 import { serve } from '@hono/node-server';
 import { readFile, readdir, stat } from 'fs/promises';
 import { basename, join, relative, resolve } from 'path';
@@ -41,8 +40,6 @@ async function startServer(app, port, maxRetries = 10) {
 
 const app = new Hono();
 const PORT = validatePort(process.env.API_PORT || 3030);
-const VITE_PORT = process.env.VITE_PORT || 6060;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || `http://localhost:${VITE_PORT}`;
 const MARKDOWN_FILE_PATH = process.env.MARKDOWN_FILE_PATH;
 const BASE_DIR = process.env.BASE_DIR || process.cwd();
 
@@ -82,11 +79,6 @@ async function scanMarkdownFiles(dir, baseDir = dir) {
 
   return files;
 }
-
-// CORS configuration
-app.use('/*', cors({
-  origin: CORS_ORIGIN
-}));
 
 // Health check
 app.get('/api/health', (c) => {

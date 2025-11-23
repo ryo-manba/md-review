@@ -7,7 +7,7 @@ interface MarkdownData {
   error: Error | null;
 }
 
-const BASE_API_URL = 'http://localhost:3030/api/markdown';
+const BASE_API_URL = '/api/markdown';
 
 export const useMarkdown = (filePath?: string | null): MarkdownData => {
   const [content, setContent] = useState<string | null>(null);
