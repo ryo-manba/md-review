@@ -1,25 +1,25 @@
 # md-review
 
-English | [日本語](./README-ja.md)
+[English](./README.md) | 日本語
 
-A CLI tool for reviewing Markdown files with inline comments.
-Comments can be copied and used as feedback for AI agents.
+Markdown ファイルにコメントを付けてレビューするための CLI ツール。
+コメントはコピー可能で、AI エージェントへのフィードバックに使える。
 
 ## Features
 
-- Display Markdown in its original format
-- Add comments to specific lines
-- Select files from tree view
+- Markdown をそのままの形式で表示
+- 特定の行にコメントを残せる
+- ツリービューでファイルを選択
 
 ## Install
 
-```sh
+```shell
 npm install -g md-review
 ```
 
 ## Usage
 
-```sh
+```shell
 md-review README.md
 ```
 
