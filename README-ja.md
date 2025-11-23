@@ -2,6 +2,8 @@
 
 [English](./README.md) | 日本語
 
+![screenshot](./assets/screenshot.png)
+
 Markdown ファイルにコメントを付けてレビューするための CLI ツール。
 コメントはコピー可能で、AI エージェントへのフィードバックに使える。
 

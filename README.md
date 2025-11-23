@@ -2,6 +2,8 @@
 
 English | [日本語](./README-ja.md)
 
+![screenshot](./assets/screenshot.png)
+
 A CLI tool for reviewing Markdown files with inline comments.
 Comments can be copied and used as feedback for AI agents.
 
