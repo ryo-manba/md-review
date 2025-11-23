@@ -6,5 +6,9 @@ export default defineConfig({
   server: {
     port: Number(process.env.VITE_PORT) || 6060,
     strictPort: false
+  },
+  preview: {
+    port: Number(process.env.VITE_PORT) || 6060,
+    strictPort: false
   }
 })

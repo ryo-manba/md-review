@@ -14,6 +14,31 @@ function validatePort(value) {
   return port;
 }
 
+// Try to start server on port, incrementing if busy
+async function startServer(app, port, maxRetries = 10) {
+  for (let i = 0; i < maxRetries; i++) {
+    const tryPort = port + i;
+    try {
+      await new Promise((resolve, reject) => {
+        const server = serve({
+          fetch: app.fetch,
+          port: tryPort
+        });
+        server.once('listening', () => resolve(server));
+        server.once('error', reject);
+      });
+      return tryPort;
+    } catch (err) {
+      if (err.code === 'EADDRINUSE') {
+        console.log(`Port ${tryPort} is in use, trying ${tryPort + 1}...`);
+        continue;
+      }
+      throw err;
+    }
+  }
+  throw new Error(`Could not find an available port after ${maxRetries} attempts`);
+}
+
 const app = new Hono();
 const PORT = validatePort(process.env.API_PORT || 3030);
 const VITE_PORT = process.env.VITE_PORT || 6060;
@@ -126,10 +151,11 @@ app.get('/api/markdown/:path{.+}', async (c) => {
 });
 
 const SERVER_READY_MESSAGE = 'md-review server started';
-console.log(`API Server running on http://localhost:${PORT}`);
-console.log(SERVER_READY_MESSAGE);
 
-serve({
-  fetch: app.fetch,
-  port: PORT
+startServer(app, PORT).then((actualPort) => {
+  console.log(`API Server running on http://localhost:${actualPort}`);
+  console.log(SERVER_READY_MESSAGE);
+}).catch((err) => {
+  console.error('Failed to start server:', err.message);
+  process.exit(1);
 });
