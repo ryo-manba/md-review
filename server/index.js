@@ -5,10 +5,26 @@ import { serve } from '@hono/node-server';
 import { readFile, readdir, stat } from 'fs/promises';
 import { basename, join, relative, resolve } from 'path';
 
+// Port validation function
+function validatePort(value) {
+  const port = parseInt(value, 10);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error(`Invalid port: ${value}`);
+  }
+  return port;
+}
+
 const app = new Hono();
-const PORT = process.env.API_PORT || 3030;
+const PORT = validatePort(process.env.API_PORT || 3030);
+const VITE_PORT = process.env.VITE_PORT || 6060;
+const CORS_ORIGIN = process.env.CORS_ORIGIN || `http://localhost:${VITE_PORT}`;
 const MARKDOWN_FILE_PATH = process.env.MARKDOWN_FILE_PATH;
 const BASE_DIR = process.env.BASE_DIR || process.cwd();
+
+// Check if file has markdown extension
+function isMarkdownFile(filename) {
+  return filename.endsWith('.md') || filename.endsWith('.markdown');
+}
 
 // Helper function to scan markdown files recursively
 async function scanMarkdownFiles(dir, baseDir = dir) {
@@ -30,7 +46,7 @@ async function scanMarkdownFiles(dir, baseDir = dir) {
     if (entry.isDirectory()) {
       const subFiles = await scanMarkdownFiles(fullPath, baseDir);
       files.push(...subFiles);
-    } else if (entry.isFile() && entry.name.endsWith('.md')) {
+    } else if (entry.isFile() && isMarkdownFile(entry.name)) {
       files.push({
         name: entry.name,
         path: relativePath,
@@ -44,7 +60,7 @@ async function scanMarkdownFiles(dir, baseDir = dir) {
 
 // CORS設定
 app.use('/*', cors({
-  origin: 'http://localhost:6060'
+  origin: CORS_ORIGIN
 }));
 
 // ヘルスチェック
@@ -58,9 +74,9 @@ app.get('/api/files', async (c) => {
     const files = await scanMarkdownFiles(BASE_DIR);
     return c.json({ files, baseDir: BASE_DIR });
   } catch (err) {
+    console.error('Error scanning markdown files:', err.message);
     return c.json({
-      error: 'Failed to scan markdown files',
-      details: err.message
+      error: 'Failed to scan markdown files'
     }, 500);
   }
 });
@@ -78,9 +94,9 @@ app.get('/api/markdown', async (c) => {
     const filename = basename(MARKDOWN_FILE_PATH);
     return c.json({ content: data, filename });
   } catch (err) {
+    console.error('Error reading markdown:', err.message);
     return c.json({
-      error: 'Failed to read markdown file',
-      details: err.message
+      error: 'Failed to read markdown file'
     }, 500);
   }
 });
@@ -102,9 +118,9 @@ app.get('/api/markdown/:path{.+}', async (c) => {
     const filename = basename(fullPath);
     return c.json({ content: data, filename, path: requestedPath });
   } catch (err) {
+    console.error('Error reading markdown:', err.message);
     return c.json({
-      error: 'Failed to read markdown file',
-      details: err.message
+      error: 'Failed to read markdown file'
     }, 500);
   }
 });
