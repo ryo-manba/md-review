@@ -1,3 +1,8 @@
 minimumReleaseAge: 1440 # At least a day
 
 trustPolicy: no-downgrade
+trustPolicyExclude:
+  - 'vite@6.4.1'
+  - 'undici-types@6.21.0'
+  - 'rxjs@7.8.2'
+  - 'semver@6.3.1'
