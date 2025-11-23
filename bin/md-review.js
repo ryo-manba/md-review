@@ -14,6 +14,21 @@ const pkg = JSON.parse(readFileSync(resolve(packageRoot, 'package.json'), 'utf-8
 
 const SERVER_READY_MESSAGE = 'md-review server started';
 
+// Port validation function
+function validatePort(value, name) {
+  const port = parseInt(value, 10);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    console.error(`Error: Invalid ${name}: ${value}. Must be between 1 and 65535`);
+    process.exit(1);
+  }
+  return port;
+}
+
+// Check if file has markdown extension
+function isMarkdownFile(filePath) {
+  return filePath.endsWith('.md') || filePath.endsWith('.markdown');
+}
+
 // Parse arguments
 const args = mri(process.argv.slice(2), {
   alias: {
@@ -35,8 +50,8 @@ if (args.help) {
 md-review - Review and annotate Markdown files with comments
 
 Usage:
-  md-review [options]              Start in dev mode (browse all .md files)
-  md-review <file> [options]       Preview a specific markdown file
+  md-review [options]              Start in dev mode (browse all markdown files)
+  md-review <file> [options]       Preview a specific markdown file (.md or .markdown)
 
 Options:
   -p, --port <port>      Vite server port (default: 6060)
@@ -60,8 +75,8 @@ if (args.version) {
 }
 
 const file = args._[0];
-const port = args.port;
-const apiPort = args['api-port'];
+const port = validatePort(args.port, 'port');
+const apiPort = validatePort(args['api-port'], 'api-port');
 const shouldOpen = args.open;
 
 // Set environment variables
@@ -77,8 +92,9 @@ if (file) {
     process.exit(1);
   }
 
-  if (!filePath.endsWith('.md')) {
-    console.warn('Warning: File does not have .md extension');
+  if (!isMarkdownFile(filePath)) {
+    console.error(`Error: File must have .md or .markdown extension: ${filePath}`);
+    process.exit(1);
   }
 
   process.env.MARKDOWN_FILE_PATH = filePath;
@@ -110,10 +126,11 @@ apiProcess.stdout.on('data', (data) => {
 
   if (!serverReady && output.includes(SERVER_READY_MESSAGE)) {
     serverReady = true;
-    console.log('Starting Vite dev server...');
+    console.log('Starting Vite preview server...');
 
     viteProcess = spawn('node', [
       'node_modules/vite/bin/vite.js',
+      'preview',
       '--port', port,
       ...(shouldOpen ? ['--open'] : [])
     ], {
