@@ -26,7 +26,6 @@
   overflow-y: auto;
 }
 
-/* Comments Sidebar Resizer */
 .comments-sidebar-resizer {
   position: absolute;
   top: 0;
@@ -70,7 +69,6 @@
   cursor: col-resize !important;
 }
 
-/* Comments Toggle Button */
 .comments-toggle-button {
   position: fixed;
   top: 20px;
@@ -138,7 +136,6 @@
   padding-left: 0;
 }
 
-/* Highlight animation for line jump */
 .markdown-content .highlight-line {
   animation: highlightFade 2s ease-out;
   background-color: rgba(88, 166, 255, 0.2);
@@ -156,7 +153,6 @@
   }
 }
 
-/* 見出し */
 .markdown-content h1 {
   font-size: 2em;
   border-bottom: 1px solid var(--border-secondary);
@@ -189,7 +185,6 @@
   color: var(--text-primary);
 }
 
-/* コードブロック */
 .markdown-content pre {
   background-color: var(--code-bg);
   border-radius: 6px;
@@ -215,7 +210,6 @@
   font-size: 100%;
 }
 
-/* リスト */
 .markdown-content ul,
 .markdown-content ol {
   padding-left: 2em;
@@ -227,7 +221,6 @@
   margin-top: 0.25em;
 }
 
-/* 引用 */
 .markdown-content blockquote {
   padding: 0 1em;
   color: var(--text-tertiary);
@@ -235,7 +228,6 @@
   margin: 0 0 16px 0;
 }
 
-/* テーブル */
 .markdown-content table {
   border-collapse: collapse;
   width: 100%;
@@ -263,7 +255,6 @@
   background-color: var(--table-bg-alt);
 }
 
-/* リンク */
 .markdown-content a {
   color: var(--link-color);
   text-decoration: none;
@@ -273,7 +264,6 @@
   text-decoration: underline;
 }
 
-/* 水平線 */
 .markdown-content hr {
   height: 0.25em;
   padding: 0;
@@ -282,12 +272,10 @@
   border: 0;
 }
 
-/* タスクリスト (GFM) */
 .markdown-content input[type="checkbox"] {
   margin-right: 0.5em;
 }
 
-/* 画像 */
 .markdown-content img {
   max-width: 100%;
   height: auto;
@@ -295,7 +283,6 @@
   margin: 1em 0;
 }
 
-/* 選択行範囲の表示 */
 .line-range {
   font-size: 0.75rem;
   font-weight: normal;
@@ -303,7 +290,6 @@
   margin-left: 0.5rem;
 }
 
-/* 選択時のポップオーバー */
 .selection-popover {
   display: flex;
   gap: 4px;
@@ -334,7 +320,6 @@
   background: #4b5563;
 }
 
-/* コメントフォーム */
 .comment-form {
   display: flex;
   flex-direction: column;
@@ -404,13 +389,11 @@
   cursor: not-allowed;
 }
 
-/* 選択範囲のハイライト */
 .selection-highlight {
   background-color: rgba(0, 0, 0, 0.1);
   border-radius: 2px;
 }
 
-/* コメントリスト */
 .comment-list-empty {
   text-align: center;
   color: var(--text-tertiary);
