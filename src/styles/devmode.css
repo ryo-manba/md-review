@@ -9,17 +9,61 @@
   flex-shrink: 0;
   height: 100%;
   overflow: hidden;
-  transition: width 0.3s ease-in-out;
   background-color: var(--bg-secondary);
   border-right: 1px solid var(--border-primary);
 }
 
 .dev-sidebar:not(.closed) {
-  width: 300px;
+  position: relative;
 }
 
 .dev-sidebar.closed {
   width: 56px;
+  transition: width 0.3s ease-in-out;
+}
+
+/* Sidebar Resizer */
+.sidebar-resizer {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  background: transparent;
+  transition: background-color 0.2s;
+  z-index: 10;
+}
+
+.sidebar-resizer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 100%;
+  background-color: transparent;
+  transition: background-color 0.2s;
+}
+
+.sidebar-resizer:hover::before {
+  background-color: var(--link-color);
+  width: 2px;
+}
+
+.dev-container.resizing .sidebar-resizer::before {
+  background-color: var(--link-color);
+  width: 2px;
+}
+
+.dev-container.resizing {
+  user-select: none;
+  cursor: col-resize;
+}
+
+.dev-container.resizing * {
+  cursor: col-resize !important;
 }
 
 /* Icon Bar */
@@ -32,6 +76,10 @@
   padding: 12px 0;
   gap: 8px;
   background-color: var(--bg-primary);
+}
+
+.icon-bar-spacer {
+  flex: 1;
 }
 
 .icon-bar-item {
@@ -60,7 +108,7 @@
 
 /* Sidebar Content */
 .sidebar-content {
-  width: 300px;
+  width: 100%;
   height: 100%;
   overflow: hidden;
 }
@@ -107,8 +155,8 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .dev-sidebar {
-    width: 250px;
+  .dev-sidebar:not(.closed) {
+    width: 240px;
   }
 
   .dev-sidebar.closed {
