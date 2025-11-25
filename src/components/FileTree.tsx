@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 import '../styles/filetree.css';
 
 interface FileInfo {
@@ -186,18 +187,21 @@ export const FileTree = ({ files, selectedFile, onFileSelect, onToggleSidebar, a
           <h3>Files</h3>
           <span className="file-count">{filteredFiles.length} of {files.length} files</span>
         </div>
-        {onToggleSidebar && (
-          <button
-            className="sidebar-collapse-button"
-            onClick={onToggleSidebar}
-            aria-label="Collapse sidebar"
-            title="Collapse sidebar"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M12 4L6 10L12 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        )}
+        <div className="file-tree-header-actions">
+          <ThemeToggle />
+          {onToggleSidebar && (
+            <button
+              className="sidebar-collapse-button"
+              onClick={onToggleSidebar}
+              aria-label="Collapse sidebar"
+              title="Collapse sidebar"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M12 4L6 10L12 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
       <div className="search-container">
         <div className="search-input-wrapper">

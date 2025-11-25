@@ -8,7 +8,7 @@
   flex: 1;
   max-width: 900px;
   padding: 2rem;
-  padding-right: 320px; /* コメントサイドバー分の余白 */
+  padding-right: 320px; /* comment sidebar padding */
   position: relative;
   margin: 0 auto;
 }
@@ -16,8 +16,8 @@
 .comments-sidebar {
   width: 300px;
   flex-shrink: 0;
-  border-left: 1px solid #e1e4e8;
-  background: #f6f8fa;
+  border-left: 1px solid var(--border-secondary);
+  background: var(--bg-secondary);
   padding: 1rem;
   height: 100vh;
   position: fixed;
@@ -27,14 +27,14 @@
 }
 
 .markdown-header {
-  border-bottom: 2px solid #e1e4e8;
+  border-bottom: 2px solid var(--border-secondary);
   padding-bottom: 1rem;
   margin-bottom: 2rem;
 }
 
 .markdown-header h1 {
   font-size: 1.5rem;
-  color: #24292e;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -42,7 +42,7 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  color: #24292e;
+  color: var(--text-primary);
   position: relative;
   padding-left: 0;
 }
@@ -50,48 +50,54 @@
 /* 見出し */
 .markdown-content h1 {
   font-size: 2em;
-  border-bottom: 1px solid #eaecef;
+  border-bottom: 1px solid var(--border-secondary);
   padding-bottom: 0.3em;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
+  color: var(--text-primary);
 }
 
 .markdown-content h2 {
   font-size: 1.5em;
-  border-bottom: 1px solid #eaecef;
+  border-bottom: 1px solid var(--border-secondary);
   padding-bottom: 0.3em;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
+  color: var(--text-primary);
 }
 
 .markdown-content h3 {
   font-size: 1.25em;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
+  color: var(--text-primary);
 }
 
 .markdown-content h4 {
   font-size: 1em;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
+  color: var(--text-primary);
 }
 
 /* コードブロック */
 .markdown-content pre {
-  background-color: #f6f8fa;
+  background-color: var(--code-bg);
   border-radius: 6px;
   padding: 16px;
   overflow: auto;
   font-size: 14px;
   line-height: 1.45;
+  border: 1px solid var(--border-secondary);
 }
 
 .markdown-content code {
-  background-color: #f6f8fa;
+  background-color: var(--code-bg);
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-size: 85%;
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  color: var(--text-primary);
 }
 
 .markdown-content pre code {
@@ -115,8 +121,8 @@
 /* 引用 */
 .markdown-content blockquote {
   padding: 0 1em;
-  color: #6a737d;
-  border-left: 4px solid #dfe2e5;
+  color: var(--text-tertiary);
+  border-left: 4px solid var(--border-secondary);
   margin: 0 0 16px 0;
 }
 
@@ -130,26 +136,27 @@
 .markdown-content table th,
 .markdown-content table td {
   padding: 6px 13px;
-  border: 1px solid #dfe2e5;
+  border: 1px solid var(--border-secondary);
 }
 
 .markdown-content table th {
   font-weight: 600;
-  background-color: #f6f8fa;
+  background-color: var(--table-bg-alt);
+  color: var(--text-primary);
 }
 
 .markdown-content table tr {
-  background-color: #ffffff;
-  border-top: 1px solid #c6cbd1;
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-primary);
 }
 
 .markdown-content table tr:nth-child(2n) {
-  background-color: #f6f8fa;
+  background-color: var(--table-bg-alt);
 }
 
 /* リンク */
 .markdown-content a {
-  color: #0366d6;
+  color: var(--link-color);
   text-decoration: none;
 }
 
@@ -162,7 +169,7 @@
   height: 0.25em;
   padding: 0;
   margin: 24px 0;
-  background-color: #e1e4e8;
+  background-color: var(--border-secondary);
   border: 0;
 }
 
@@ -175,7 +182,7 @@
 .line-range {
   font-size: 0.75rem;
   font-weight: normal;
-  color: #6a737d;
+  color: var(--text-tertiary);
   margin-left: 0.5rem;
 }
 
@@ -289,7 +296,7 @@
 /* コメントリスト */
 .comment-list-empty {
   text-align: center;
-  color: #6a737d;
+  color: var(--text-tertiary);
   padding: 2rem 1rem;
 }
 
@@ -299,7 +306,7 @@
 
 .comment-list-hint {
   font-size: 0.85rem;
-  color: #959da5;
+  color: var(--text-secondary);
 }
 
 .comment-list-header {
@@ -308,13 +315,13 @@
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e1e4e8;
+  border-bottom: 1px solid var(--border-secondary);
 }
 
 .comment-list-title {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #24292e;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -323,19 +330,19 @@
   align-items: center;
   gap: 0.25rem;
   background: none;
-  border: 1px solid #e1e4e8;
+  border: 1px solid var(--border-secondary);
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
-  color: #6a737d;
+  color: var(--text-tertiary);
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .comment-list-copy-all:hover {
-  background: #f6f8fa;
-  color: #0366d6;
-  border-color: #0366d6;
+  background: var(--bg-tertiary);
+  color: var(--link-color);
+  border-color: var(--link-color);
 }
 
 .comment-list-copy-all.copied {
@@ -353,17 +360,17 @@
   align-items: center;
   gap: 0.25rem;
   background: none;
-  border: 1px solid #e1e4e8;
+  border: 1px solid var(--border-secondary);
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
   font-size: 0.75rem;
-  color: #6a737d;
+  color: var(--text-tertiary);
   cursor: pointer;
   transition: all 0.15s;
 }
 
 .comment-list-delete-all:hover {
-  background: #ffeef0;
+  background: rgba(255, 100, 100, 0.1);
   color: #d73a49;
   border-color: #d73a49;
 }
@@ -375,8 +382,8 @@
 }
 
 .comment-item {
-  background: white;
-  border: 1px solid #e1e4e8;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-secondary);
   border-radius: 6px;
   padding: 0.75rem;
   font-size: 0.85rem;
@@ -391,7 +398,7 @@
 
 .comment-item-lines {
   font-size: 0.75rem;
-  color: #6a737d;
+  color: var(--text-tertiary);
   font-weight: 500;
 }
 
@@ -405,7 +412,7 @@
 .comment-item-delete {
   background: none;
   border: none;
-  color: #959da5;
+  color: var(--text-secondary);
   cursor: pointer;
   padding: 0.125rem 0.25rem;
   display: flex;
@@ -419,7 +426,7 @@
 }
 
 .comment-item-copy:hover {
-  color: #0366d6;
+  color: var(--link-color);
 }
 
 .comment-item-copy.copied {
@@ -432,18 +439,18 @@
 
 .comment-item-selection {
   font-size: 0.8rem;
-  color: #6a737d;
+  color: var(--text-tertiary);
   font-style: italic;
   margin-bottom: 0.5rem;
   padding: 0.25rem 0.5rem;
-  background: #f6f8fa;
+  background: var(--bg-secondary);
   border-radius: 3px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .comment-item-text {
-  color: #24292e;
+  color: var(--text-primary);
   line-height: 1.4;
   white-space: pre-wrap;
 }

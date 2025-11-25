@@ -1,11 +1,13 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import ReactMarkdown, { Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github.css';
+import 'highlight.js/styles/github-dark.css';
 import '../styles/markdown.css';
 import { SelectionPopover } from './SelectionPopover';
 import { CommentList, Comment } from './CommentList';
+import { useDarkMode } from '../hooks/useDarkMode';
 
 interface MarkdownPreviewProps {
   content: string;
@@ -69,6 +71,23 @@ const componentsWithLinePosition: Components = {
 
 export const MarkdownPreview = ({ content, filename, filePath, comments, onCommentsChange }: MarkdownPreviewProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
+  const { isDark } = useDarkMode();
+
+  // Update highlight.js theme based on dark mode
+  useEffect(() => {
+    const lightTheme = document.querySelector('link[href*="github.css"]');
+    const darkTheme = document.querySelector('link[href*="github-dark.css"]');
+
+    if (lightTheme && darkTheme) {
+      if (isDark) {
+        (lightTheme as HTMLLinkElement).disabled = true;
+        (darkTheme as HTMLLinkElement).disabled = false;
+      } else {
+        (lightTheme as HTMLLinkElement).disabled = false;
+        (darkTheme as HTMLLinkElement).disabled = true;
+      }
+    }
+  }, [isDark]);
 
   const handleSubmitComment = (comment: string, selectedText: string, startLine: number, endLine: number) => {
     const newComment: Comment = {
