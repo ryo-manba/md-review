@@ -287,6 +287,14 @@
   margin-right: 0.5em;
 }
 
+/* 画像 */
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em 0;
+}
+
 /* 選択行範囲の表示 */
 .line-range {
   font-size: 0.75rem;
