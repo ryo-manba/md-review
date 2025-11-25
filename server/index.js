@@ -64,11 +64,8 @@ async function scanMarkdownFiles(dir, baseDir = dir) {
     const fullPath = join(dir, entry.name);
     const relativePath = relative(baseDir, fullPath);
 
-    // Skip node_modules, .git, dist, and hidden directories
-    if (entry.name.startsWith('.') ||
-        entry.name === 'node_modules' ||
-        entry.name === 'dist' ||
-        entry.name === 'dist-ssr') {
+    const skipPatterns = ['node_modules', 'dist'];
+    if (skipPatterns.includes(entry.name)) {
       continue;
     }
 
