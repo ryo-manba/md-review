@@ -1,6 +1,6 @@
 # md-review
 
-English | [日本語](./README-ja.md)
+English | [日本語](./README-ja.md) | [简体中文](./README-zh.md)
 
 ![screenshot](./assets/screenshot.png)
 
