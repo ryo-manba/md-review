@@ -14,9 +14,10 @@ interface CommentListProps {
   filename: string;
   onDeleteComment?: (id: string) => void;
   onDeleteAll?: () => void;
+  onClose?: () => void;
 }
 
-export const CommentList = ({ comments, filename, onDeleteComment, onDeleteAll }: CommentListProps) => {
+export const CommentList = ({ comments, filename, onDeleteComment, onDeleteAll, onClose }: CommentListProps) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedAll, setCopiedAll] = useState(false);
 
@@ -63,7 +64,21 @@ export const CommentList = ({ comments, filename, onDeleteComment, onDeleteAll }
   return (
     <div className="comment-list">
       <div className="comment-list-header">
-        <h3 className="comment-list-title">Comments ({comments.length})</h3>
+        <div className="comment-list-title-wrapper">
+          {onClose && (
+            <button
+              className="comment-list-collapse-btn"
+              onClick={onClose}
+              title="Hide comments"
+              aria-label="Hide comments"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          )}
+          <h3 className="comment-list-title">Comments ({comments.length})</h3>
+        </div>
         <div className="comment-list-actions">
           <button
             className={`comment-list-copy-all ${copiedAll ? 'copied' : ''}`}

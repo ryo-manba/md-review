@@ -8,6 +8,7 @@ import '../styles/markdown.css';
 import { SelectionPopover } from './SelectionPopover';
 import { CommentList, Comment } from './CommentList';
 import { useDarkMode } from '../hooks/useDarkMode';
+import { useResizable } from '../hooks/useResizable';
 
 interface MarkdownPreviewProps {
   content: string;
@@ -72,6 +73,15 @@ const componentsWithLinePosition: Components = {
 export const MarkdownPreview = ({ content, filename, filePath, comments, onCommentsChange }: MarkdownPreviewProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const { isDark } = useDarkMode();
+  const { width: commentsSidebarWidth, isResizing, isCollapsed, handleMouseDown, toggleCollapse } = useResizable({
+    initialWidth: 300,
+    minWidth: 250,
+    maxWidth: 600,
+    storageKey: 'md-review-comments-sidebar-width',
+    direction: 'right',
+    collapsible: true,
+    collapseThreshold: 70
+  });
 
   // Update highlight.js theme based on dark mode
   useEffect(() => {
@@ -111,8 +121,8 @@ export const MarkdownPreview = ({ content, filename, filePath, comments, onComme
   };
 
   return (
-    <div className="markdown-with-comments">
-      <div className="markdown-container">
+    <div className={`markdown-with-comments ${isResizing ? 'resizing' : ''} ${isCollapsed ? 'comments-collapsed' : ''}`}>
+      <div className="markdown-container" style={{ paddingRight: isCollapsed ? '0' : `${commentsSidebarWidth + 20}px` }}>
         <header className="markdown-header">
           <h1>{filename}</h1>
         </header>
@@ -130,14 +140,36 @@ export const MarkdownPreview = ({ content, filename, filePath, comments, onComme
           onSubmitComment={handleSubmitComment}
         />
       </div>
-      <aside className="comments-sidebar">
-        <CommentList
-          comments={[...comments].sort((a, b) => a.startLine - b.startLine)}
-          filename={filePath || filename}
-          onDeleteComment={handleDeleteComment}
-          onDeleteAll={handleDeleteAllComments}
-        />
-      </aside>
+      {isCollapsed && (
+        <button
+          className="comments-toggle-button"
+          onClick={toggleCollapse}
+          title="Show comments"
+          aria-label="Show comments"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H6l-4 3V5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          {comments.length > 0 && (
+            <span className="comments-badge">{comments.length}</span>
+          )}
+        </button>
+      )}
+      {!isCollapsed && (
+        <aside className="comments-sidebar" style={{ width: `${commentsSidebarWidth}px` }}>
+          <div
+            className="comments-sidebar-resizer"
+            onMouseDown={handleMouseDown}
+          />
+          <CommentList
+            comments={[...comments].sort((a, b) => a.startLine - b.startLine)}
+            filename={filePath || filename}
+            onDeleteComment={handleDeleteComment}
+            onDeleteAll={handleDeleteAllComments}
+            onClose={toggleCollapse}
+          />
+        </aside>
+      )}
     </div>
   );
 };

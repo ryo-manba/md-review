@@ -17,11 +17,13 @@ export const DevModeApp = () => {
   const [focusSearch, setFocusSearch] = useState<boolean>(false);
   const [commentsMap, setCommentsMap] = useLocalStorage<Record<string, Comment[]>>('md-review-comments', {});
   const { content, filename, loading: markdownLoading, error: markdownError } = useMarkdown(selectedFile);
-  const { width: sidebarWidth, isResizing, handleMouseDown } = useResizable({
+  const { width: sidebarWidth, isResizing, isCollapsed: sidebarCollapsed, handleMouseDown, toggleCollapse } = useResizable({
     initialWidth: 240,
     minWidth: 180,
     maxWidth: 500,
-    storageKey: 'md-review-sidebar-width'
+    storageKey: 'md-review-sidebar-width',
+    collapsible: true,
+    collapseThreshold: 120
   });
 
   const handleSearchClick = () => {
@@ -51,17 +53,24 @@ export const DevModeApp = () => {
     );
   }
 
+  const effectiveSidebarOpen = sidebarOpen && !sidebarCollapsed;
+
   return (
-    <div className={`dev-container ${!sidebarOpen ? 'sidebar-closed' : ''} ${isResizing ? 'resizing' : ''}`}>
+    <div className={`dev-container ${!effectiveSidebarOpen ? 'sidebar-closed' : ''} ${isResizing ? 'resizing' : ''}`}>
       <div
-        className={`dev-sidebar ${!sidebarOpen ? 'closed' : ''}`}
-        style={sidebarOpen ? { width: `${sidebarWidth}px` } : undefined}
+        className={`dev-sidebar ${!effectiveSidebarOpen ? 'closed' : ''}`}
+        style={effectiveSidebarOpen ? { width: `${sidebarWidth}px` } : undefined}
       >
-        {!sidebarOpen && (
+        {!effectiveSidebarOpen && (
           <div className="sidebar-icon-bar">
             <button
               className="icon-bar-item"
-              onClick={() => setSidebarOpen(true)}
+              onClick={() => {
+                setSidebarOpen(true);
+                if (sidebarCollapsed) {
+                  toggleCollapse();
+                }
+              }}
               title="Open sidebar"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -94,7 +103,7 @@ export const DevModeApp = () => {
             </a>
           </div>
         )}
-        {sidebarOpen && (
+        {effectiveSidebarOpen && (
           <>
             <div className="sidebar-content">
               <FileTree

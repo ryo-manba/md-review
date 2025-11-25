@@ -5,13 +5,19 @@ interface UseResizableOptions {
   minWidth: number;
   maxWidth: number;
   storageKey?: string;
+  direction?: 'left' | 'right'; // 'left' = grows to right, 'right' = grows to left
+  collapsible?: boolean; // Allow closing by dragging below minWidth
+  collapseThreshold?: number; // Width threshold to trigger collapse
 }
 
 export const useResizable = ({
   initialWidth,
   minWidth,
   maxWidth,
-  storageKey
+  storageKey,
+  direction = 'left',
+  collapsible = false,
+  collapseThreshold = 100
 }: UseResizableOptions) => {
   const [width, setWidth] = useState<number>(() => {
     if (storageKey) {
@@ -26,6 +32,7 @@ export const useResizable = ({
     return initialWidth;
   });
 
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const startXRef = useRef<number>(0);
   const startWidthRef = useRef<number>(0);
@@ -42,16 +49,27 @@ export const useResizable = ({
 
     const handleMouseMove = (e: MouseEvent) => {
       const delta = e.clientX - startXRef.current;
-      const newWidth = Math.min(
-        maxWidth,
-        Math.max(minWidth, startWidthRef.current + delta)
-      );
-      setWidth(newWidth);
+      // For right-side panels, invert the delta (dragging left = wider)
+      const effectiveDelta = direction === 'right' ? -delta : delta;
+      const newWidth = startWidthRef.current + effectiveDelta;
+
+      // Check if should collapse
+      if (collapsible && newWidth < collapseThreshold) {
+        setIsCollapsed(true);
+        setWidth(minWidth); // Keep a minimum width for reopening
+      } else {
+        setIsCollapsed(false);
+        const clampedWidth = Math.min(
+          maxWidth,
+          Math.max(minWidth, newWidth)
+        );
+        setWidth(clampedWidth);
+      }
     };
 
     const handleMouseUp = () => {
       setIsResizing(false);
-      if (storageKey) {
+      if (storageKey && !isCollapsed) {
         localStorage.setItem(storageKey, width.toString());
       }
     };
@@ -63,11 +81,17 @@ export const useResizable = ({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isResizing, maxWidth, minWidth, storageKey, width]);
+  }, [isResizing, maxWidth, minWidth, storageKey, width, direction, collapsible, collapseThreshold, isCollapsed]);
+
+  const toggleCollapse = useCallback(() => {
+    setIsCollapsed((prev) => !prev);
+  }, []);
 
   return {
     width,
     isResizing,
-    handleMouseDown
+    isCollapsed,
+    handleMouseDown,
+    toggleCollapse
   };
 };
