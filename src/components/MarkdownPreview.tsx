@@ -120,6 +120,12 @@ export const MarkdownPreview = ({ content, filename, filePath, comments, onComme
     onCommentsChange([]);
   };
 
+  const handleEditComment = (id: string, newText: string) => {
+    onCommentsChange(
+      comments.map((c) => (c.id === id ? { ...c, text: newText } : c))
+    );
+  };
+
   const handleLineClick = (line: number) => {
     if (!contentRef.current) return;
 
@@ -185,6 +191,7 @@ export const MarkdownPreview = ({ content, filename, filePath, comments, onComme
             onDeleteAll={handleDeleteAllComments}
             onClose={toggleCollapse}
             onLineClick={handleLineClick}
+            onEditComment={handleEditComment}
           />
         </aside>
       )}

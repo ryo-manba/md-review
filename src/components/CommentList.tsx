@@ -16,11 +16,14 @@ interface CommentListProps {
   onDeleteAll?: () => void;
   onClose?: () => void;
   onLineClick?: (line: number) => void;
+  onEditComment?: (id: string, newText: string) => void;
 }
 
-export const CommentList = ({ comments, filename, onDeleteComment, onDeleteAll, onClose, onLineClick }: CommentListProps) => {
+export const CommentList = ({ comments, filename, onDeleteComment, onDeleteAll, onClose, onLineClick, onEditComment }: CommentListProps) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedAll, setCopiedAll] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState('');
 
   const formatComment = (comment: Comment) => {
     const lineRange = comment.startLine === comment.endLine
@@ -50,6 +53,34 @@ export const CommentList = ({ comments, filename, onDeleteComment, onDeleteAll, 
       setTimeout(() => setCopiedAll(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
+    }
+  };
+
+  const handleStartEdit = (comment: Comment) => {
+    setEditingId(comment.id);
+    setEditText(comment.text);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditText('');
+  };
+
+  const handleSaveEdit = (id: string) => {
+    if (editText.trim() && onEditComment) {
+      onEditComment(id, editText.trim());
+      setEditingId(null);
+      setEditText('');
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>, id: string) => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      handleSaveEdit(id);
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      handleCancelEdit();
     }
   };
 
@@ -127,6 +158,18 @@ export const CommentList = ({ comments, filename, onDeleteComment, onDeleteAll, 
                   : `${comment.startLine}-${comment.endLine}`}
               </button>
               <div className="comment-item-actions">
+                {onEditComment && editingId !== comment.id && (
+                  <button
+                    className="comment-item-edit"
+                    onClick={() => handleStartEdit(comment)}
+                    title="Edit comment"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                  </button>
+                )}
                 <button
                   className={`comment-item-copy ${copiedId === comment.id ? 'copied' : ''}`}
                   onClick={() => handleCopyComment(comment)}
@@ -159,7 +202,35 @@ export const CommentList = ({ comments, filename, onDeleteComment, onDeleteAll, 
                 ? comment.selectedText.slice(0, 50) + '...'
                 : comment.selectedText}"
             </div>
-            <div className="comment-item-text">{comment.text}</div>
+            {editingId === comment.id ? (
+              <div className="comment-edit-form">
+                <textarea
+                  className="comment-edit-input"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e, comment.id)}
+                  rows={3}
+                  autoFocus
+                />
+                <div className="comment-edit-actions">
+                  <button
+                    className="comment-edit-cancel"
+                    onClick={handleCancelEdit}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="comment-edit-save"
+                    onClick={() => handleSaveEdit(comment.id)}
+                    disabled={!editText.trim()}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="comment-item-text">{comment.text}</div>
+            )}
           </div>
         ))}
       </div>
