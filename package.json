@@ -1,6 +1,6 @@
 {
   "name": "md-review",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Review Markdown files in your browser with inline comments",
   "type": "module",
   "bin": {
