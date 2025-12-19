@@ -11,9 +11,7 @@ export interface LineRange {
 function getLineAtSelectionPoint(node: Node, intraOffset: number): number | null {
   // For text nodes, find data-line-start from parent element
   let el: HTMLElement | null =
-    node.nodeType === Node.TEXT_NODE
-      ? node.parentElement
-      : (node as HTMLElement);
+    node.nodeType === Node.TEXT_NODE ? node.parentElement : (node as HTMLElement);
 
   // Traverse up to find element with data-line-start
   while (el && !el.hasAttribute('data-line-start')) {
@@ -66,7 +64,9 @@ function getSelectedLineRange(): LineRange | null {
 /**
  * Hook to track selected line range within Markdown preview
  */
-export function useSelectionLineRange(containerRef: RefObject<HTMLElement | null>): LineRange | null {
+export function useSelectionLineRange(
+  containerRef: RefObject<HTMLElement | null>,
+): LineRange | null {
   const [lineRange, setLineRange] = useState<LineRange | null>(null);
 
   const handleSelectionChange = useCallback(() => {

@@ -5,7 +5,10 @@ interface FileWatchEvent {
   path?: string;
 }
 
-export const useFileWatch = (onFileChange: (path: string) => void, onFileAdded?: (path: string) => void) => {
+export const useFileWatch = (
+  onFileChange: (path: string) => void,
+  onFileAdded?: (path: string) => void,
+) => {
   useEffect(() => {
     const eventSource = new EventSource('/api/watch');
 

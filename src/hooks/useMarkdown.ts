@@ -18,7 +18,7 @@ export const useMarkdown = (filePath?: string | null): MarkdownData => {
   const [reloadTrigger, setReloadTrigger] = useState<number>(0);
 
   const reload = useCallback(() => {
-    setReloadTrigger(prev => prev + 1);
+    setReloadTrigger((prev) => prev + 1);
   }, []);
 
   useEffect(() => {
@@ -35,9 +35,7 @@ export const useMarkdown = (filePath?: string | null): MarkdownData => {
       try {
         // If filePath is undefined, use the CLI endpoint (no path parameter)
         // If filePath is provided, use the dev endpoint (with path parameter)
-        const url = filePath === undefined
-          ? BASE_API_URL
-          : `${BASE_API_URL}/${filePath}`;
+        const url = filePath === undefined ? BASE_API_URL : `${BASE_API_URL}/${filePath}`;
 
         const response = await fetch(url);
 

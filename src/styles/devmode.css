@@ -93,7 +93,9 @@
   border-radius: 6px;
   cursor: pointer;
   color: var(--text-secondary);
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
   padding: 0;
 }
 

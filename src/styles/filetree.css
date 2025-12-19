@@ -64,7 +64,9 @@
   border-radius: 6px;
   cursor: pointer;
   color: var(--text-secondary);
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
   padding: 0;
   flex-shrink: 0;
 }
@@ -93,7 +95,9 @@
   border: 1px solid var(--border-primary);
   border-radius: 6px;
   padding: 6px 8px;
-  transition: border-color 0.2s, background-color 0.2s;
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
 }
 
 .search-input-wrapper:focus-within {
@@ -148,7 +152,10 @@
   border-radius: 4px;
   font-size: 11px;
   color: var(--text-secondary);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
   flex-shrink: 0;
 }
 

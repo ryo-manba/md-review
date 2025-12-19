@@ -80,6 +80,6 @@ export const useDarkMode = () => {
     toggleTheme,
     resetToSystem,
     isDark: effectiveTheme === 'dark',
-    isSystem: theme === 'system'
+    isSystem: theme === 'system',
   };
 };

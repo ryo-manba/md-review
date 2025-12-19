@@ -17,7 +17,7 @@ export const useResizable = ({
   storageKey,
   direction = 'left',
   collapsible = false,
-  collapseThreshold = 100
+  collapseThreshold = 100,
 }: UseResizableOptions) => {
   const [width, setWidth] = useState<number>(() => {
     if (storageKey) {
@@ -37,12 +37,15 @@ export const useResizable = ({
   const startXRef = useRef<number>(0);
   const startWidthRef = useRef<number>(0);
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsResizing(true);
-    startXRef.current = e.clientX;
-    startWidthRef.current = width;
-  }, [width]);
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      setIsResizing(true);
+      startXRef.current = e.clientX;
+      startWidthRef.current = width;
+    },
+    [width],
+  );
 
   useEffect(() => {
     if (!isResizing) return;
@@ -59,10 +62,7 @@ export const useResizable = ({
         setWidth(minWidth); // Keep a minimum width for reopening
       } else {
         setIsCollapsed(false);
-        const clampedWidth = Math.min(
-          maxWidth,
-          Math.max(minWidth, newWidth)
-        );
+        const clampedWidth = Math.min(maxWidth, Math.max(minWidth, newWidth));
         setWidth(clampedWidth);
       }
     };
@@ -81,7 +81,17 @@ export const useResizable = ({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isResizing, maxWidth, minWidth, storageKey, width, direction, collapsible, collapseThreshold, isCollapsed]);
+  }, [
+    isResizing,
+    maxWidth,
+    minWidth,
+    storageKey,
+    width,
+    direction,
+    collapsible,
+    collapseThreshold,
+    isCollapsed,
+  ]);
 
   const toggleCollapse = useCallback(() => {
     setIsCollapsed((prev) => !prev);
@@ -92,6 +102,6 @@ export const useResizable = ({
     isResizing,
     isCollapsed,
     handleMouseDown,
-    toggleCollapse
+    toggleCollapse,
   };
 };

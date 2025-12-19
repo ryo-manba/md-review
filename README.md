@@ -51,17 +51,20 @@ md-review docs/guide.md --port 8080
 ## Comment Management
 
 ### Adding Comments
+
 1. Select text in the markdown preview
 2. Click the "Comment" button that appears
 3. Type your comment and press `Cmd/Ctrl+Enter` or click "Submit"
 
 ### Editing Comments
+
 1. Click the edit icon (pencil) on any existing comment
 2. Modify the text in the textarea
 3. Press `Cmd/Ctrl+Enter` or click "Save" to save changes
 4. Press `Escape` or click "Cancel" to discard changes
 
 ### Keyboard Shortcuts
+
 - `Cmd/Ctrl+Enter` - Submit/Save comment
 - `Escape` - Cancel editing
 - `Cmd+K` - Focus search bar (in directory mode)

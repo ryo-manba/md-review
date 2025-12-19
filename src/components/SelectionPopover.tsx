@@ -14,15 +14,18 @@ interface SavedSelection {
 
 interface SelectionPopoverProps {
   containerRef: React.RefObject<HTMLElement | null>;
-  onSubmitComment?: (comment: string, selectedText: string, startLine: number, endLine: number) => void;
+  onSubmitComment?: (
+    comment: string,
+    selectedText: string,
+    startLine: number,
+    endLine: number,
+  ) => void;
 }
 
 // Get line number at selection point
 function getLineAtSelectionPoint(node: Node, intraOffset: number): number | null {
   let el: HTMLElement | null =
-    node.nodeType === Node.TEXT_NODE
-      ? node.parentElement
-      : (node as HTMLElement);
+    node.nodeType === Node.TEXT_NODE ? node.parentElement : (node as HTMLElement);
 
   while (el && !el.hasAttribute('data-line-start')) {
     el = el.parentElement;
@@ -64,10 +67,7 @@ function getSelectionLineRange(sel: Selection): { startLine: number; endLine: nu
   return { startLine, endLine };
 }
 
-export const SelectionPopover = ({
-  containerRef,
-  onSubmitComment,
-}: SelectionPopoverProps) => {
+export const SelectionPopover = ({ containerRef, onSubmitComment }: SelectionPopoverProps) => {
   const [position, setPosition] = useState<PopoverPosition | null>(null);
   const [visible, setVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -78,42 +78,45 @@ export const SelectionPopover = ({
   const isEditingRef = useRef(false);
 
   // Create or update highlight elements
-  const updateHighlight = useCallback((range: Range | null) => {
-    // Remove existing highlight
-    if (highlightRef.current) {
-      highlightRef.current.remove();
-      highlightRef.current = null;
-    }
+  const updateHighlight = useCallback(
+    (range: Range | null) => {
+      // Remove existing highlight
+      if (highlightRef.current) {
+        highlightRef.current.remove();
+        highlightRef.current = null;
+      }
 
-    if (!range || !containerRef.current) return;
+      if (!range || !containerRef.current) return;
 
-    const rects = range.getClientRects();
-    if (rects.length === 0) return;
+      const rects = range.getClientRects();
+      if (rects.length === 0) return;
 
-    const containerRect = containerRef.current.getBoundingClientRect();
-    const highlight = document.createElement('div');
-    highlight.className = 'selection-highlight-container';
-    highlight.style.position = 'absolute';
-    highlight.style.top = '0';
-    highlight.style.left = '0';
-    highlight.style.pointerEvents = 'none';
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const highlight = document.createElement('div');
+      highlight.className = 'selection-highlight-container';
+      highlight.style.position = 'absolute';
+      highlight.style.top = '0';
+      highlight.style.left = '0';
+      highlight.style.pointerEvents = 'none';
 
-    for (let i = 0; i < rects.length; i++) {
-      const rect = rects[i];
-      const span = document.createElement('div');
-      span.className = 'selection-highlight';
-      span.style.position = 'absolute';
-      span.style.left = `${rect.left - containerRect.left + containerRef.current.scrollLeft}px`;
-      span.style.top = `${rect.top - containerRect.top + containerRef.current.scrollTop}px`;
-      span.style.width = `${rect.width}px`;
-      span.style.height = `${rect.height}px`;
-      highlight.appendChild(span);
-    }
+      for (let i = 0; i < rects.length; i++) {
+        const rect = rects[i];
+        const span = document.createElement('div');
+        span.className = 'selection-highlight';
+        span.style.position = 'absolute';
+        span.style.left = `${rect.left - containerRect.left + containerRef.current.scrollLeft}px`;
+        span.style.top = `${rect.top - containerRect.top + containerRef.current.scrollTop}px`;
+        span.style.width = `${rect.width}px`;
+        span.style.height = `${rect.height}px`;
+        highlight.appendChild(span);
+      }
 
-    containerRef.current.style.position = 'relative';
-    containerRef.current.appendChild(highlight);
-    highlightRef.current = highlight;
-  }, [containerRef]);
+      containerRef.current.style.position = 'relative';
+      containerRef.current.appendChild(highlight);
+      highlightRef.current = highlight;
+    },
+    [containerRef],
+  );
 
   const updatePosition = useCallback(() => {
     const sel = window.getSelection();
@@ -196,7 +199,7 @@ export const SelectionPopover = ({
         comment.trim(),
         savedSelection.text,
         savedSelection.startLine,
-        savedSelection.endLine
+        savedSelection.endLine,
       );
     }
     setComment('');
@@ -303,11 +306,7 @@ export const SelectionPopover = ({
             <button className="comment-cancel" onClick={handleCancel}>
               Cancel
             </button>
-            <button
-              className="comment-submit"
-              onClick={handleSubmit}
-              disabled={!comment.trim()}
-            >
+            <button className="comment-submit" onClick={handleSubmit} disabled={!comment.trim()}>
               Submit
             </button>
           </div>

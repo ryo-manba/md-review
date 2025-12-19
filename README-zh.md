@@ -51,17 +51,20 @@ md-review docs/guide.md --port 8080
 ## 注释管理
 
 ### 添加注释
+
 1. 在 Markdown 预览中选择文本
 2. 点击出现的 "Comment" 按钮
 3. 输入注释并按 `Cmd/Ctrl+Enter` 或点击 "Submit"
 
 ### 编辑注释
+
 1. 点击任何现有注释上的编辑图标（铅笔）
 2. 在文本区域中修改文本
 3. 按 `Cmd/Ctrl+Enter` 或点击 "Save" 保存更改
 4. 按 `Escape` 或点击 "Cancel" 放弃更改
 
 ### 键盘快捷键
+
 - `Cmd/Ctrl+Enter` - 提交/保存注释
 - `Escape` - 取消编辑
 - `Cmd+K` - 聚焦搜索栏（目录模式）

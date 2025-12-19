@@ -5,7 +5,7 @@ This is a test markdown file for **md-preview**.
 ## Features
 
 - Headings (h1-h6)
-- **Bold** and *italic* text
+- **Bold** and _italic_ text
 - Lists (ordered and unordered)
 - Code blocks with syntax highlighting
 - Tables
@@ -19,7 +19,7 @@ function greet(name) {
   console.log(`Hello, ${name}!`);
 }
 
-greet('World');
+greet("World");
 ```
 
 ```typescript
@@ -30,18 +30,18 @@ interface User {
 
 const user: User = {
   id: 1,
-  name: 'Alice'
+  name: "Alice"
 };
 ```
 
 ## Table Example
 
-| Feature | Status |
-|---------|--------|
-| Headings | ✅ |
-| Code blocks | ✅ |
-| Tables | ✅ |
-| GFM | ✅ |
+| Feature     | Status |
+| ----------- | ------ |
+| Headings    | ✅     |
+| Code blocks | ✅     |
+| Tables      | ✅     |
+| GFM         | ✅     |
 
 ## Blockquote
 

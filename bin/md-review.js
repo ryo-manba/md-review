@@ -34,13 +34,13 @@ const args = mri(process.argv.slice(2), {
   alias: {
     p: 'port',
     h: 'help',
-    v: 'version'
+    v: 'version',
   },
   default: {
     port: '3030',
-    open: true
+    open: true,
   },
-  boolean: ['help', 'version', 'open']
+  boolean: ['help', 'version', 'open'],
 });
 
 // Help message
@@ -108,7 +108,7 @@ console.log(`   Port: ${port}`);
 const serverProcess = spawn('node', ['server/index.js'], {
   cwd: packageRoot,
   stdio: ['inherit', 'pipe', 'inherit'],
-  env: process.env
+  env: process.env,
 });
 
 let serverReady = false;

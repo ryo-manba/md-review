@@ -272,7 +272,7 @@
   border: 0;
 }
 
-.markdown-content input[type="checkbox"] {
+.markdown-content input[type='checkbox'] {
   margin-right: 0.5em;
 }
 
@@ -451,7 +451,6 @@
   color: var(--text-primary);
   margin: 0;
 }
-
 
 .comment-list-actions {
   display: flex;

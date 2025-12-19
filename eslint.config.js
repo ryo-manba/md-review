@@ -7,7 +7,7 @@ import globals from 'globals';
 export default [
   // Global ignore patterns
   {
-    ignores: ['node_modules/', 'dist/', 'bin/', '*.config.js']
+    ignores: ['node_modules/', 'dist/', 'bin/', '*.config.js'],
   },
 
   // JavaScript recommended config
@@ -21,29 +21,29 @@ export default [
     files: ['**/*.{js,jsx,ts,tsx}'],
     plugins: {
       react: react,
-      'react-hooks': reactHooks
+      'react-hooks': reactHooks,
     },
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.node
+        ...globals.node,
       },
       parserOptions: {
         ecmaFeatures: {
-          jsx: true
-        }
-      }
+          jsx: true,
+        },
+      },
     },
     settings: {
       react: {
         version: 'detect',
-        runtime: 'automatic'
-      }
+        runtime: 'automatic',
+      },
     },
     rules: {
       ...react.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
-      'react/react-in-jsx-scope': 'off'
-    }
-  }
+      'react/react-in-jsx-scope': 'off',
+    },
+  },
 ];

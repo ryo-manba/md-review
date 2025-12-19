@@ -29,7 +29,7 @@ async function startServer(app, port, maxRetries = 10) {
       await new Promise((resolve, reject) => {
         const server = serve({
           fetch: app.fetch,
-          port: tryPort
+          port: tryPort,
         });
         server.once('listening', () => resolve(server));
         server.once('error', reject);
@@ -80,7 +80,7 @@ async function scanMarkdownFiles(dir, baseDir = dir) {
       files.push({
         name: entry.name,
         path: relativePath,
-        dir: relative(baseDir, dir) || '.'
+        dir: relative(baseDir, dir) || '.',
       });
     }
   }
@@ -104,15 +104,15 @@ app.get('/api/watch', (c) => {
       c.req.raw.signal.addEventListener('abort', () => {
         sseClients.delete(client);
       });
-    }
+    },
   });
 
   return new Response(stream, {
     headers: {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive'
-    }
+      Connection: 'keep-alive',
+    },
   });
 });
 
@@ -128,18 +128,24 @@ app.get('/api/files', async (c) => {
     return c.json({ files, baseDir: BASE_DIR });
   } catch (err) {
     console.error('Error scanning markdown files:', err.message);
-    return c.json({
-      error: 'Failed to scan markdown files'
-    }, 500);
+    return c.json(
+      {
+        error: 'Failed to scan markdown files',
+      },
+      500,
+    );
   }
 });
 
 // Get markdown file API (CLI mode)
 app.get('/api/markdown', async (c) => {
   if (!MARKDOWN_FILE_PATH) {
-    return c.json({
-      error: 'Markdown file path not specified'
-    }, 500);
+    return c.json(
+      {
+        error: 'Markdown file path not specified',
+      },
+      500,
+    );
   }
 
   try {
@@ -148,9 +154,12 @@ app.get('/api/markdown', async (c) => {
     return c.json({ content: data, filename });
   } catch (err) {
     console.error('Error reading markdown:', err.message);
-    return c.json({
-      error: 'Failed to read markdown file'
-    }, 500);
+    return c.json(
+      {
+        error: 'Failed to read markdown file',
+      },
+      500,
+    );
   }
 });
 
@@ -162,9 +171,12 @@ app.get('/api/markdown/:path{.+}', async (c) => {
     // Security check: prevent path traversal
     const fullPath = resolve(BASE_DIR, requestedPath);
     if (!fullPath.startsWith(resolve(BASE_DIR))) {
-      return c.json({
-        error: 'Invalid file path'
-      }, 403);
+      return c.json(
+        {
+          error: 'Invalid file path',
+        },
+        403,
+      );
     }
 
     const data = await readFile(fullPath, 'utf-8');
@@ -172,9 +184,12 @@ app.get('/api/markdown/:path{.+}', async (c) => {
     return c.json({ content: data, filename, path: requestedPath });
   } catch (err) {
     console.error('Error reading markdown:', err.message);
-    return c.json({
-      error: 'Failed to read markdown file'
-    }, 500);
+    return c.json(
+      {
+        error: 'Failed to read markdown file',
+      },
+      500,
+    );
   }
 });
 
@@ -201,8 +216,8 @@ const watcher = watch(BASE_DIR, {
   ignoreInitial: true,
   awaitWriteFinish: {
     stabilityThreshold: 100,
-    pollInterval: 100
-  }
+    pollInterval: 100,
+  },
 });
 
 watcher.on('change', (path) => {
@@ -214,10 +229,10 @@ watcher.on('change', (path) => {
     // Broadcast to all SSE clients
     const message = JSON.stringify({
       type: 'file-changed',
-      path: relativePath
+      path: relativePath,
     });
 
-    sseClients.forEach(client => {
+    sseClients.forEach((client) => {
       try {
         client.controller.enqueue(client.encoder.encode(`data: ${message}\n\n`));
       } catch {
@@ -235,10 +250,10 @@ watcher.on('add', (path) => {
 
     const message = JSON.stringify({
       type: 'file-added',
-      path: relativePath
+      path: relativePath,
     });
 
-    sseClients.forEach(client => {
+    sseClients.forEach((client) => {
       try {
         client.controller.enqueue(client.encoder.encode(`data: ${message}\n\n`));
       } catch {
@@ -248,11 +263,13 @@ watcher.on('add', (path) => {
   }
 });
 
-startServer(app, PORT).then((actualPort) => {
-  console.log(`API Server running on http://localhost:${actualPort}`);
-  console.log(`Watching for file changes in: ${BASE_DIR}`);
-  console.log(SERVER_READY_MESSAGE);
-}).catch((err) => {
-  console.error('Failed to start server:', err.message);
-  process.exit(1);
-});
+startServer(app, PORT)
+  .then((actualPort) => {
+    console.log(`API Server running on http://localhost:${actualPort}`);
+    console.log(`Watching for file changes in: ${BASE_DIR}`);
+    console.log(SERVER_READY_MESSAGE);
+  })
+  .catch((err) => {
+    console.error('Failed to start server:', err.message);
+    process.exit(1);
+  });
