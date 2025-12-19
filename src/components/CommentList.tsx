@@ -198,9 +198,11 @@ export const CommentList = ({ comments, filename, onDeleteComment, onDeleteAll, 
               </div>
             </div>
             <div className="comment-item-selection">
-              "{comment.selectedText.length > 50
+              {'"'}
+              {comment.selectedText.length > 50
                 ? comment.selectedText.slice(0, 50) + '...'
-                : comment.selectedText}"
+                : comment.selectedText}
+              {'"'}
             </div>
             {editingId === comment.id ? (
               <div className="comment-edit-form">

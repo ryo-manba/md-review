@@ -51,7 +51,7 @@ function getSelectionLineRange(sel: Selection): { startLine: number; endLine: nu
 
   if (anchorLine == null || focusLine == null) return null;
 
-  let startLine = Math.min(anchorLine, focusLine);
+  const startLine = Math.min(anchorLine, focusLine);
   let endLine = Math.max(anchorLine, focusLine);
 
   const selectedText = sel.toString();

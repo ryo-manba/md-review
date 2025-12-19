@@ -2,7 +2,7 @@
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { serveStatic } from '@hono/node-server/serve-static';
-import { readFile, readdir, stat } from 'fs/promises';
+import { readFile, readdir } from 'fs/promises';
 import { basename, join, relative, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { watch } from 'chokidar';
@@ -187,7 +187,7 @@ app.get('*', async (c) => {
     const indexPath = resolve(distDir, 'index.html');
     const html = await readFile(indexPath, 'utf-8');
     return c.html(html);
-  } catch (err) {
+  } catch {
     return c.text('Not found', 404);
   }
 });
@@ -196,7 +196,7 @@ const SERVER_READY_MESSAGE = 'md-review server started';
 
 // Setup file watcher
 const watcher = watch(BASE_DIR, {
-  ignored: /(^|[\/\\])\..|(node_modules|dist)/,
+  ignored: /(^|[/\\])\..|(node_modules|dist)/,
   persistent: true,
   ignoreInitial: true,
   awaitWriteFinish: {
@@ -220,7 +220,7 @@ watcher.on('change', (path) => {
     sseClients.forEach(client => {
       try {
         client.controller.enqueue(client.encoder.encode(`data: ${message}\n\n`));
-      } catch (err) {
+      } catch {
         // Client disconnected, remove it
         sseClients.delete(client);
       }
@@ -241,7 +241,7 @@ watcher.on('add', (path) => {
     sseClients.forEach(client => {
       try {
         client.controller.enqueue(client.encoder.encode(`data: ${message}\n\n`));
-      } catch (err) {
+      } catch {
         sseClients.delete(client);
       }
     });
