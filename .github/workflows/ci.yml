@@ -28,6 +28,9 @@ jobs:
       - name: Run lint
         run: pnpm run lint
 
+      - name: Run CSS lint
+        run: pnpm run lint:css
+
       - name: Run format check
         run: pnpm run fmt:check
 
