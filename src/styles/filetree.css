@@ -42,7 +42,7 @@
 }
 
 .file-tree-header h3 {
-  margin: 0 0 4px 0;
+  margin: 0 0 4px;
   font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
@@ -103,7 +103,7 @@
 .search-input-wrapper:focus-within {
   background-color: var(--bg-primary);
   border-color: var(--link-color);
-  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+  box-shadow: 0 0 0 3px rgb(88 166 255 / 10%);
 }
 
 .search-icon {
@@ -175,7 +175,6 @@
   padding: 4px 8px;
   cursor: pointer;
   font-size: 14px;
-  user-select: none;
   transition: background-color 0.1s;
 }
 
@@ -188,7 +187,7 @@
 }
 
 .tree-item.file.selected {
-  background-color: rgba(88, 166, 255, 0.15);
+  background-color: rgb(88 166 255 / 15%);
   border-left: 2px solid var(--link-color);
 }
 

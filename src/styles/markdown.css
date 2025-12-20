@@ -61,7 +61,6 @@
 }
 
 .markdown-with-comments.resizing {
-  user-select: none;
   cursor: col-resize;
 }
 
@@ -82,7 +81,7 @@
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
   transition: all 0.2s ease;
   z-index: 1000;
   color: white;
@@ -90,7 +89,7 @@
 
 .comments-toggle-button:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 20%);
 }
 
 .comments-toggle-button:active {
@@ -128,7 +127,7 @@
 }
 
 .markdown-content {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   color: var(--text-primary);
@@ -137,17 +136,18 @@
 }
 
 .markdown-content .highlight-line {
-  animation: highlightFade 2s ease-out;
-  background-color: rgba(88, 166, 255, 0.2);
+  animation: highlight-fade 2s ease-out;
+  background-color: rgb(88 166 255 / 20%);
   border-radius: 3px;
   padding: 0.25rem;
   margin: -0.25rem;
 }
 
-@keyframes highlightFade {
+@keyframes highlight-fade {
   0% {
-    background-color: rgba(88, 166, 255, 0.3);
+    background-color: rgb(88 166 255 / 30%);
   }
+
   100% {
     background-color: transparent;
   }
@@ -200,7 +200,7 @@
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-size: 85%;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
   color: var(--text-primary);
 }
 
@@ -225,7 +225,7 @@
   padding: 0 1em;
   color: var(--text-tertiary);
   border-left: 4px solid var(--border-secondary);
-  margin: 0 0 16px 0;
+  margin: 0 0 16px;
 }
 
 .markdown-content table {
@@ -296,7 +296,7 @@
   background: #1f2937;
   border-radius: 6px;
   padding: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
   z-index: 1000;
 }
 
@@ -334,9 +334,15 @@
   color: #e5e7eb;
   font-size: 13px;
   padding: 8px;
-  resize: vertical;
+  min-width: 400px;
   min-height: 60px;
   font-family: inherit;
+}
+
+@supports (field-sizing: content) {
+  .comment-input {
+    field-sizing: content;
+  }
 }
 
 .comment-input:focus {
@@ -390,7 +396,7 @@
 }
 
 .selection-highlight {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgb(0 0 0 / 10%);
   border-radius: 2px;
 }
 
@@ -528,7 +534,7 @@
 }
 
 .comment-list-delete-all:hover {
-  background: rgba(255, 100, 100, 0.1);
+  background: rgb(255 100 100 / 10%);
   color: #d73a49;
   border-color: #d73a49;
 }
@@ -622,6 +628,7 @@
   color: var(--text-primary);
   line-height: 1.4;
   white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
 
 .comment-item-edit {
@@ -654,8 +661,13 @@
   color: var(--text-primary);
   font-size: 0.85rem;
   font-family: inherit;
-  resize: vertical;
   min-height: 60px;
+}
+
+@supports (field-sizing: content) {
+  .comment-edit-input {
+    field-sizing: content;
+  }
 }
 
 .comment-edit-input:focus {
@@ -695,12 +707,12 @@
   border-color: var(--link-color);
 }
 
-.comment-edit-save:hover:not(:disabled) {
-  background: #0056b3;
-  border-color: #0056b3;
-}
-
 .comment-edit-save:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.comment-edit-save:hover:not(:disabled) {
+  background: #0056b3;
+  border-color: #0056b3;
 }

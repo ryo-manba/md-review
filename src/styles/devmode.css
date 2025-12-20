@@ -58,7 +58,6 @@
 }
 
 .dev-container.resizing {
-  user-select: none;
   cursor: col-resize;
 }
 
@@ -135,7 +134,7 @@
 
 .dev-placeholder h2,
 .dev-empty h2 {
-  margin: 0 0 8px 0;
+  margin: 0 0 8px;
   font-size: 24px;
   color: var(--text-primary);
 }
@@ -156,7 +155,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .dev-sidebar:not(.closed) {
     width: 240px;
   }
@@ -166,7 +165,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   .dev-container {
     flex-direction: column;
   }
