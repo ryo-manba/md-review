@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/ryo-manba/md-review/compare/v0.1.0...v1.0.0) (2025-12-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* release v1.0.0 - mark as stable ([#9](https://github.com/ryo-manba/md-review/issues/9))
+
+### Miscellaneous Chores
+
+* release v1.0.0 - mark as stable ([#9](https://github.com/ryo-manba/md-review/issues/9)) ([8ce154d](https://github.com/ryo-manba/md-review/commit/8ce154d52d994fa7d4414f47ecb8901ac6130ff5))
+
 ## [0.1.0](https://github.com/ryo-manba/md-review/compare/v0.0.7...v0.1.0) (2025-12-21)
 
 
