@@ -29,6 +29,7 @@ npm install -g md-review
 ```sh
 md-review [options]              # Browse all markdown files in current directory
 md-review <file> [options]       # Preview a specific markdown file
+md-review <directory> [options]  # Browse markdown files in a specific directory
 ```
 
 ### Options
@@ -44,6 +45,7 @@ md-review <file> [options]       # Preview a specific markdown file
 
 ```sh
 md-review                        # Browse all markdown files in current directory
+md-review docs                   # Browse markdown files in docs directory
 md-review README.md              # Preview README.md
 md-review docs/guide.md --port 8080
 ```

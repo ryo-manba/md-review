@@ -29,6 +29,7 @@ npm install -g md-review
 ```sh
 md-review [options]              # 预览当前目录中的所有 Markdown 文件
 md-review <file> [options]       # 预览特定的 Markdown 文件
+md-review <directory> [options]  # 预览特定目录中的 Markdown 文件
 ```
 
 ### Options
@@ -44,6 +45,7 @@ md-review <file> [options]       # 预览特定的 Markdown 文件
 
 ```sh
 md-review                        # 预览当前目录中的所有 Markdown 文件
+md-review docs                   # 预览 docs 目录中的 Markdown 文件
 md-review README.md              # 预览 README.md
 md-review docs/guide.md --port 8080
 ```

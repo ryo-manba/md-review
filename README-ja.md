@@ -29,6 +29,7 @@ npm install -g md-review
 ```sh
 md-review [options]              # カレントディレクトリのすべてのマークダウンファイルをプレビュー
 md-review <file> [options]       # 特定のマークダウンファイルをプレビュー
+md-review <directory> [options]  # 特定のディレクトリのマークダウンファイルをプレビュー
 ```
 
 ### Options
@@ -44,6 +45,7 @@ md-review <file> [options]       # 特定のマークダウンファイルをプ
 
 ```sh
 md-review                        # カレントディレクトリのすべてのマークダウンファイルをプレビュー
+md-review docs                   # docs ディレクトリのマークダウンファイルをプレビュー
 md-review README.md              # README.md をプレビュー
 md-review docs/guide.md --port 8080
 ```

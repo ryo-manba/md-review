@@ -2,7 +2,7 @@
 
 import { spawn } from 'child_process';
 import { resolve, dirname } from 'path';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, statSync } from 'fs';
 import { fileURLToPath } from 'url';
 import mri from 'mri';
 
@@ -51,6 +51,7 @@ md-review - Review and annotate Markdown files with comments
 Usage:
   md-review [options]              Start in dev mode (browse all markdown files)
   md-review <file> [options]       Preview a specific markdown file (.md or .markdown)
+  md-review <directory> [options]  Browse markdown files in a specific directory
 
 Options:
   -p, --port <port>      Server port (default: 3030)
@@ -60,6 +61,7 @@ Options:
 
 Examples:
   md-review                        Start dev mode in current directory
+  md-review docs                   Browse markdown files in docs directory
   md-review README.md              Preview README.md
   md-review docs/guide.md --port 8080
 `);
@@ -88,13 +90,22 @@ if (file) {
     process.exit(1);
   }
 
-  if (!isMarkdownFile(filePath)) {
-    console.error(`Error: File must have .md or .markdown extension: ${filePath}`);
-    process.exit(1);
-  }
+  const stats = statSync(filePath);
 
-  process.env.MARKDOWN_FILE_PATH = filePath;
-  console.log(`File: ${filePath}`);
+  if (stats.isDirectory()) {
+    // Dev mode with specified directory
+    process.env.BASE_DIR = filePath;
+    console.log(`Directory: ${filePath}`);
+  } else {
+    // File mode
+    if (!isMarkdownFile(filePath)) {
+      console.error(`Error: File must have .md or .markdown extension: ${filePath}`);
+      process.exit(1);
+    }
+
+    process.env.MARKDOWN_FILE_PATH = filePath;
+    console.log(`File: ${filePath}`);
+  }
 } else {
   // Dev mode - browse all markdown files
   process.env.BASE_DIR = process.cwd();
