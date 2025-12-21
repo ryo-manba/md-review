@@ -50,11 +50,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
-  border: none;
+  background-color: var(--bg-tertiary);
+  border: 1px solid transparent;
   color: var(--text-secondary);
   cursor: pointer;
-  padding: 8px;
+  padding: 5px;
   border-radius: 6px;
   transition:
     background-color 0.2s,
@@ -62,6 +62,6 @@ body {
 }
 
 .theme-toggle:hover {
-  background-color: var(--bg-secondary);
+  background-color: var(--border-primary);
   color: var(--text-primary);
 }

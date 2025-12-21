@@ -54,25 +54,23 @@
 }
 
 .sidebar-collapse-button {
-  width: 32px;
-  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
-  border: none;
+  background-color: var(--bg-tertiary);
+  border: 1px solid transparent;
   border-radius: 6px;
   cursor: pointer;
   color: var(--text-secondary);
   transition:
     background-color 0.2s,
     color 0.2s;
-  padding: 0;
+  padding: 5px;
   flex-shrink: 0;
 }
 
 .sidebar-collapse-button:hover {
-  background-color: var(--bg-secondary);
+  background-color: var(--border-primary);
   color: var(--text-primary);
 }
 

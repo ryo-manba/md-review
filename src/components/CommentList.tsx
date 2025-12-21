@@ -91,15 +91,6 @@ export const CommentList = ({
     }
   };
 
-  if (comments.length === 0) {
-    return (
-      <div className="comment-list-empty">
-        <p>No comments yet</p>
-        <p className="comment-list-hint">Select text to add a comment</p>
-      </div>
-    );
-  }
-
   return (
     <div className="comment-list">
       <div className="comment-list-header">
@@ -114,14 +105,14 @@ export const CommentList = ({
               <svg
                 width="20"
                 height="20"
-                viewBox="0 0 24 24"
+                viewBox="0 0 20 20"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <polyline points="9 18 15 12 9 6" />
+                <polyline points="8 4 14 10 8 16" />
               </svg>
             </button>
           )}
@@ -140,68 +131,78 @@ export const CommentList = ({
               >
                 <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
               </svg>
-              <span className="comment-count-badge" aria-hidden="true">
-                {comments.length}
-              </span>
+              {comments.length > 0 && (
+                <span className="comment-count-badge" aria-hidden="true">
+                  {comments.length}
+                </span>
+              )}
             </span>
           </h3>
         </div>
-        <div className="comment-list-actions">
-          <button
-            className={`comment-list-copy-all ${copiedAll ? 'copied' : ''}`}
-            onClick={handleCopyAll}
-            title={copiedAll ? 'Copied!' : 'Copy all comments'}
-          >
-            {copiedAll ? (
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            ) : (
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
-              </svg>
-            )}
-            <span>Copy All</span>
-          </button>
-          {onDeleteAll && (
+        {comments.length > 0 && (
+          <div className="comment-list-actions">
             <button
-              className="comment-list-delete-all"
-              onClick={onDeleteAll}
-              title="Delete all comments"
+              className={`comment-list-copy-all ${copiedAll ? 'copied' : ''}`}
+              onClick={handleCopyAll}
+              title={copiedAll ? 'Copied!' : 'Copy all comments'}
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <polyline points="3 6 5 6 21 6" />
-                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
-              </svg>
-              <span>Clear</span>
+              {copiedAll ? (
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              ) : (
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                </svg>
+              )}
+              <span>Copy All</span>
             </button>
-          )}
-        </div>
+            {onDeleteAll && (
+              <button
+                className="comment-list-delete-all"
+                onClick={onDeleteAll}
+                title="Delete all comments"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                </svg>
+                <span>Clear</span>
+              </button>
+            )}
+          </div>
+        )}
       </div>
-      <div className="comment-list-items">
-        {comments.map((comment) => (
+      {comments.length === 0 ? (
+        <div className="comment-list-empty">
+          <p>No comments yet</p>
+          <p className="comment-list-hint">Select text to add a comment</p>
+        </div>
+      ) : (
+        <div className="comment-list-items">
+          {comments.map((comment) => (
           <div key={comment.id} className="comment-item">
             <div className="comment-item-header">
               <button
@@ -310,7 +311,8 @@ export const CommentList = ({
             )}
           </div>
         ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

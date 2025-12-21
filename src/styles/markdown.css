@@ -116,12 +116,12 @@
 
 .markdown-header {
   border-bottom: 2px solid var(--border-secondary);
-  padding-bottom: 1rem;
-  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .markdown-header h1 {
-  font-size: 1.5rem;
+  font-size: 1rem;
   color: var(--text-primary);
   margin: 0;
 }
@@ -157,7 +157,7 @@
   font-size: 2em;
   border-bottom: 1px solid var(--border-secondary);
   padding-bottom: 0.3em;
-  margin-top: 1.5em;
+  margin-top: 1.2em;
   margin-bottom: 0.5em;
   color: var(--text-primary);
 }
@@ -417,8 +417,8 @@
 
 .comment-list-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border-secondary);
@@ -427,30 +427,42 @@
 .comment-list-title-wrapper {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-  flex: 1;
-  min-width: 0;
+  gap: 0.5rem;
 }
 
 .comment-list-collapse-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: none;
-  border: none;
+  background-color: rgb(255 255 255 / 10%);
+  border: 1px solid rgb(255 255 255 / 15%);
   border-radius: 4px;
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.15s;
-  padding: 0;
+  padding: 5px;
   flex-shrink: 0;
 }
 
+.comment-list-collapse-btn svg {
+  display: block;
+  margin: auto;
+}
+
 .comment-list-collapse-btn:hover {
-  background: var(--bg-tertiary);
+  background-color: rgb(255 255 255 / 20%);
+  border-color: rgb(255 255 255 / 30%);
   color: var(--text-primary);
+}
+
+:root:not(.dark-mode) .comment-list-collapse-btn {
+  background-color: var(--bg-primary);
+  border-color: var(--border-secondary);
+}
+
+:root:not(.dark-mode) .comment-list-collapse-btn:hover {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-primary);
 }
 
 .comment-list-title {
@@ -488,6 +500,7 @@
   display: flex;
   gap: 0.5rem;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .comment-list-copy-all {
