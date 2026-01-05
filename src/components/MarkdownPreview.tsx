@@ -7,6 +7,7 @@ import 'highlight.js/styles/github-dark.css';
 import '../styles/markdown.css';
 import { SelectionPopover } from './SelectionPopover';
 import { CommentList, Comment } from './CommentList';
+import { MermaidBlock } from './MermaidBlock';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { useResizable } from '../hooks/useResizable';
 
@@ -20,6 +21,24 @@ interface MarkdownPreviewProps {
 
 // Components that add data-line-start attribute to elements
 const componentsWithLinePosition: Components = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
+  code: ({ node, className, children, ...props }: any) => {
+    const match = /language-(\w+)/.exec(className || '');
+    const language = match ? match[1] : '';
+
+    // Render mermaid diagrams
+    if (language === 'mermaid') {
+      const code = String(children).replace(/\n$/, '');
+      return <MermaidBlock code={code} />;
+    }
+
+    // Default code rendering
+    return (
+      <code className={className} {...props}>
+        {children}
+      </code>
+    );
+  },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   p: ({ node, children, ...props }: any) => (
     <p data-line-start={node?.position?.start?.line} {...props}>
