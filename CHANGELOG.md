@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/ryo-manba/md-review/compare/v1.0.0...v1.1.0) (2026-01-05)
+
+
+### Features
+
+* add mermaid diagram support ([#11](https://github.com/ryo-manba/md-review/issues/11)) ([7d284a1](https://github.com/ryo-manba/md-review/commit/7d284a11279cc68110ba4cdb85170f4922328dd3))
+
 ## [1.0.0](https://github.com/ryo-manba/md-review/compare/v0.1.0...v1.0.0) (2025-12-21)
 
 
