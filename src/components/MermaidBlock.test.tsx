@@ -20,7 +20,10 @@ describe('MermaidBlock', () => {
   });
 
   it('should render diagram with strict security level', async () => {
-    vi.mocked(mermaid.render).mockResolvedValue({ svg: '<svg>diagram</svg>', diagramType: 'flowchart' });
+    vi.mocked(mermaid.render).mockResolvedValue({
+      svg: '<svg>diagram</svg>',
+      diagramType: 'flowchart',
+    });
 
     render(<MermaidBlock code="graph TD; A-->B" />);
 
