@@ -504,6 +504,7 @@
 }
 
 .comment-list-copy-all {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -523,10 +524,6 @@
   background: var(--bg-tertiary);
   color: var(--link-color);
   border-color: var(--link-color);
-}
-
-.comment-list-copy-all {
-  position: relative;
 }
 
 .comment-list-copy-all.copied {
@@ -655,6 +652,10 @@
   justify-content: center;
 }
 
+.comment-item-copy {
+  position: relative;
+}
+
 .comment-item-delete {
   font-size: 1rem;
   line-height: 1;
@@ -666,10 +667,6 @@
 
 .comment-item-copy.copied {
   color: #22863a;
-}
-
-.comment-item-copy {
-  position: relative;
 }
 
 .comment-item-delete:hover {
