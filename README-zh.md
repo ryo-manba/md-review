@@ -2,7 +2,7 @@
 
 [English](./README.md) | [日本語](./README-ja.md) | 简体中文
 
-![screenshot](./assets/screenshot.png)
+![demo](./assets/demo.gif)
 
 用于预览 Markdown 文件并添加注释的 CLI 工具。
 注释可以复制并用作 AI 代理的反馈。

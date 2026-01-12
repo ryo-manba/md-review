@@ -2,7 +2,7 @@
 
 English | [日本語](./README-ja.md) | [简体中文](./README-zh.md)
 
-![screenshot](./assets/screenshot.png)
+![demo](./assets/demo.gif)
 
 A CLI tool for reviewing Markdown files with inline comments.
 Comments can be copied and used as feedback for AI agents.
