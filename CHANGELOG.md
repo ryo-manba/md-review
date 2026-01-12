@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/ryo-manba/md-review/compare/v1.1.0...v1.2.0) (2026-01-12)
+
+
+### Features
+
+* add tooltip to copy buttons ([#15](https://github.com/ryo-manba/md-review/issues/15)) ([b127185](https://github.com/ryo-manba/md-review/commit/b127185015df3123f574bf665fa9ffd06f99106b))
+
+
+### Bug Fixes
+
+* preserve single line breaks ([#13](https://github.com/ryo-manba/md-review/issues/13)) ([f5bbacb](https://github.com/ryo-manba/md-review/commit/f5bbacb7b90ea9e465ddb4fa73f20accec735a42))
+
 ## [1.1.0](https://github.com/ryo-manba/md-review/compare/v1.0.0...v1.1.0) (2026-01-05)
 
 
