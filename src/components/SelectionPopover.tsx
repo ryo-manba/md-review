@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
 interface PopoverPosition {
   x: number;
@@ -77,6 +77,11 @@ export const SelectionPopover = ({ containerRef, onSubmitComment }: SelectionPop
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const highlightRef = useRef<HTMLDivElement | null>(null);
   const isEditingRef = useRef(false);
+
+  const isMac = useMemo(
+    () => typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.userAgent),
+    [],
+  );
 
   // Create or update highlight elements
   const updateHighlight = useCallback(
@@ -328,9 +333,19 @@ export const SelectionPopover = ({ containerRef, onSubmitComment }: SelectionPop
             <button className="comment-cancel" onClick={handleCancel}>
               Cancel
             </button>
-            <button className="comment-submit" onClick={handleSubmit} disabled={!comment.trim()}>
-              Submit
-            </button>
+            <div className="comment-submit-wrapper">
+              <button
+                className="comment-submit"
+                onClick={handleSubmit}
+                disabled={!comment.trim()}
+              >
+                Submit
+              </button>
+              <div role="tooltip" className="shortcut-tooltip">
+                <kbd className="shortcut-key">{isMac ? '⌘' : 'Ctrl'}</kbd>
+                <kbd className="shortcut-key">Enter</kbd>
+              </div>
+            </div>
           </div>
         </div>
       )}

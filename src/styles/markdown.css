@@ -825,3 +825,62 @@
   color: #d73a49;
   font-size: 0.85rem;
 }
+
+/* Submit button shortcut tooltip */
+.comment-submit-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.shortcut-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  background: #1f2937;
+  padding: 6px 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+  white-space: nowrap;
+  z-index: 1001;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.comment-submit:hover:not(:disabled) + .shortcut-tooltip {
+  visibility: visible;
+  animation: tooltip-fade-in 0.15s ease-out 0.5s both;
+}
+
+.comment-submit:focus-visible:not(:disabled) + .shortcut-tooltip {
+  visibility: visible;
+  animation: tooltip-fade-in 0.15s ease-out both;
+}
+
+.shortcut-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #1f2937;
+}
+
+.shortcut-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #374151;
+  color: #e5e7eb;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 6px;
+  min-width: 28px;
+  border: 1px solid #4b5563;
+}
