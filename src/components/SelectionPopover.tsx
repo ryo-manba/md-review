@@ -73,6 +73,7 @@ export const SelectionPopover = ({ containerRef, onSubmitComment }: SelectionPop
   const [isEditing, setIsEditing] = useState(false);
   const [comment, setComment] = useState('');
   const [savedSelection, setSavedSelection] = useState<SavedSelection | null>(null);
+  const [formMaxHeight, setFormMaxHeight] = useState<number | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const highlightRef = useRef<HTMLDivElement | null>(null);
   const isEditingRef = useRef(false);
@@ -169,7 +170,7 @@ export const SelectionPopover = ({ containerRef, onSubmitComment }: SelectionPop
     if (savedSelection) {
       updateHighlight(savedSelection.range);
 
-      // Position input at the top of selection
+      // Position input above the selection
       const rects = savedSelection.range.getClientRects();
       if (rects.length > 0) {
         // Find topmost rect
@@ -179,9 +180,25 @@ export const SelectionPopover = ({ containerRef, onSubmitComment }: SelectionPop
             topRect = rects[i];
           }
         }
+
+        // Calculate max height based on available space above selection
+        // Leave 8px padding from viewport top and 8px gap from selection
+        const minTopPadding = 8;
+        const gapFromSelection = 8;
+        const availableHeight = topRect.top - minTopPadding - gapFromSelection;
+
+        // Default CSS max-height is around 300px (textarea 50vh max + actions)
+        // If available space is less than that, constrain the form
+        const defaultMaxHeight = 300;
+        if (availableHeight < defaultMaxHeight && availableHeight > 0) {
+          setFormMaxHeight(availableHeight);
+        } else {
+          setFormMaxHeight(null);
+        }
+
         setPosition({
           x: topRect.left,
-          y: topRect.top - 8,
+          y: topRect.top - gapFromSelection,
         });
       }
     }
@@ -208,6 +225,7 @@ export const SelectionPopover = ({ containerRef, onSubmitComment }: SelectionPop
     setVisible(false);
     setSavedSelection(null);
     updateHighlight(null);
+    setFormMaxHeight(null);
   };
 
   const handleCancel = () => {
@@ -217,6 +235,7 @@ export const SelectionPopover = ({ containerRef, onSubmitComment }: SelectionPop
     setVisible(false);
     setSavedSelection(null);
     updateHighlight(null);
+    setFormMaxHeight(null);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -292,7 +311,10 @@ export const SelectionPopover = ({ containerRef, onSubmitComment }: SelectionPop
           Comment
         </button>
       ) : (
-        <div className="comment-form">
+        <div
+          className="comment-form"
+          style={formMaxHeight ? { maxHeight: formMaxHeight, overflowY: 'auto' } : undefined}
+        >
           <textarea
             ref={inputRef}
             className="comment-input"
