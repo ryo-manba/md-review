@@ -334,11 +334,7 @@ export const SelectionPopover = ({ containerRef, onSubmitComment }: SelectionPop
               Cancel
             </button>
             <div className="comment-submit-wrapper">
-              <button
-                className="comment-submit"
-                onClick={handleSubmit}
-                disabled={!comment.trim()}
-              >
+              <button className="comment-submit" onClick={handleSubmit} disabled={!comment.trim()}>
                 Submit
               </button>
               <div role="tooltip" className="shortcut-tooltip">
