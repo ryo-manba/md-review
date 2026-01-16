@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.0](https://github.com/ryo-manba/md-review/compare/v1.2.0...v1.3.0) (2026-01-16)
+
+
+### Features
+
+* add keyboard shortcut tooltip to submit button ([#20](https://github.com/ryo-manba/md-review/issues/20)) ([47d3320](https://github.com/ryo-manba/md-review/commit/47d3320d7d05889df9f38d1b50833efb7f252ea2))
+
+
+### Bug Fixes
+
+* prevent comment form from expanding horizontally ([#18](https://github.com/ryo-manba/md-review/issues/18)) ([6a38833](https://github.com/ryo-manba/md-review/commit/6a3883348b9037b9a9beaabfc0dfe0e600ea72a0))
+
 ## [1.2.0](https://github.com/ryo-manba/md-review/compare/v1.1.0...v1.2.0) (2026-01-12)
 
 
