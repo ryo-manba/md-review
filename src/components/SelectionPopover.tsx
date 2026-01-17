@@ -316,19 +316,21 @@ export const SelectionPopover = ({ containerRef, onSubmitComment }: SelectionPop
           Comment
         </button>
       ) : (
-        <div
-          className="comment-form"
-          style={formMaxHeight ? { maxHeight: formMaxHeight, overflowY: 'auto' } : undefined}
-        >
-          <textarea
-            ref={inputRef}
-            className="comment-input"
-            placeholder="Add a comment..."
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            onKeyDown={handleKeyDown}
-            rows={3}
-          />
+        <div className="comment-form">
+          <div
+            className="comment-form-content"
+            style={formMaxHeight ? { maxHeight: formMaxHeight, overflowY: 'auto' } : undefined}
+          >
+            <textarea
+              ref={inputRef}
+              className="comment-input"
+              placeholder="Add a comment..."
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              onKeyDown={handleKeyDown}
+              rows={3}
+            />
+          </div>
           <div className="comment-actions">
             <button className="comment-cancel" onClick={handleCancel}>
               Cancel
