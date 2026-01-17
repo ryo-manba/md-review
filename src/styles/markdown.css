@@ -327,10 +327,6 @@
   width: 420px;
 }
 
-.comment-form-content {
-  overflow-x: hidden;
-}
-
 .comment-input {
   background: #374151;
   border: 1px solid #4b5563;
