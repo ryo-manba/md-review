@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/ryo-manba/md-review/compare/v1.3.0...v1.3.1) (2026-01-17)
+
+
+### Bug Fixes
+
+* prevent horizontal scrollbar in comment form ([#22](https://github.com/ryo-manba/md-review/issues/22)) ([b43920d](https://github.com/ryo-manba/md-review/commit/b43920dbe2c024ea5f5e883d1c34e6549fc1d471))
+
 ## [1.3.0](https://github.com/ryo-manba/md-review/compare/v1.2.0...v1.3.0) (2026-01-16)
 
 
