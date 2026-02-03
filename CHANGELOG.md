@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/ryo-manba/md-review/compare/v1.3.1...v1.3.2) (2026-02-03)
+
+
+### Bug Fixes
+
+* correct behavior when a single file is specified ([#25](https://github.com/ryo-manba/md-review/issues/25)) ([aaad335](https://github.com/ryo-manba/md-review/commit/aaad335416b1af4111ce786e254f454d286cf82e))
+
 ## [1.3.1](https://github.com/ryo-manba/md-review/compare/v1.3.0...v1.3.1) (2026-01-17)
 
 
