@@ -123,6 +123,15 @@ app.get('/api/health', (c) => {
 
 // Get list of all markdown files
 app.get('/api/files', async (c) => {
+  if (MARKDOWN_FILE_PATH) {
+    const name = basename(MARKDOWN_FILE_PATH);
+    return c.json({
+      files: [{ name, path: name, dir: '.' }],
+      baseDir: dirname(MARKDOWN_FILE_PATH),
+      selectedFile: name,
+    });
+  }
+
   try {
     const files = await scanMarkdownFiles(BASE_DIR);
     return c.json({ files, baseDir: BASE_DIR });
@@ -169,8 +178,9 @@ app.get('/api/markdown/:path{.+}', async (c) => {
 
   try {
     // Security check: prevent path traversal
-    const fullPath = resolve(BASE_DIR, requestedPath);
-    if (!fullPath.startsWith(resolve(BASE_DIR))) {
+    const baseDir = MARKDOWN_FILE_PATH ? dirname(MARKDOWN_FILE_PATH) : BASE_DIR;
+    const fullPath = resolve(baseDir, requestedPath);
+    if (!fullPath.startsWith(resolve(baseDir))) {
       return c.json(
         {
           error: 'Invalid file path',
@@ -210,8 +220,10 @@ app.get('*', async (c) => {
 const SERVER_READY_MESSAGE = 'md-review server started';
 
 // Setup file watcher
-const watcher = watch(BASE_DIR, {
-  ignored: /(^|[/\\])\..|(node_modules|dist)/,
+const watchTarget = MARKDOWN_FILE_PATH || BASE_DIR;
+const watchBase = MARKDOWN_FILE_PATH ? dirname(MARKDOWN_FILE_PATH) : BASE_DIR;
+const watcher = watch(watchTarget, {
+  ignored: MARKDOWN_FILE_PATH ? undefined : /(^|[/\\])\..|(node_modules|dist)/,
   persistent: true,
   ignoreInitial: true,
   awaitWriteFinish: {
@@ -223,7 +235,7 @@ const watcher = watch(BASE_DIR, {
 watcher.on('change', (path) => {
   // Only notify for markdown files
   if (isMarkdownFile(path)) {
-    const relativePath = relative(BASE_DIR, path);
+    const relativePath = relative(watchBase, path);
     console.log(`File changed: ${relativePath}`);
 
     // Broadcast to all SSE clients
@@ -245,7 +257,7 @@ watcher.on('change', (path) => {
 
 watcher.on('add', (path) => {
   if (isMarkdownFile(path)) {
-    const relativePath = relative(BASE_DIR, path);
+    const relativePath = relative(watchBase, path);
     console.log(`File added: ${relativePath}`);
 
     const message = JSON.stringify({
@@ -266,7 +278,7 @@ watcher.on('add', (path) => {
 startServer(app, PORT)
   .then((actualPort) => {
     console.log(`API Server running on http://localhost:${actualPort}`);
-    console.log(`Watching for file changes in: ${BASE_DIR}`);
+    console.log(`Watching for file changes in: ${watchTarget}`);
     console.log(SERVER_READY_MESSAGE);
   })
   .catch((err) => {

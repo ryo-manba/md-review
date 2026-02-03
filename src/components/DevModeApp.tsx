@@ -12,8 +12,7 @@ import { ThemeToggle } from './ThemeToggle';
 import '../styles/devmode.css';
 
 export const DevModeApp = () => {
-  const { files, loading: filesLoading, error: filesError } = useFileList();
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const { files, selectedFile, setSelectedFile, loading: filesLoading, error: filesError } = useFileList();
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [focusSearch, setFocusSearch] = useState<boolean>(false);
   const [commentsMap, setCommentsMap] = useLocalStorage<Record<string, Comment[]>>(

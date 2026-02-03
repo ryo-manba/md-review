@@ -8,6 +8,8 @@ interface FileInfo {
 
 interface FileListData {
   files: FileInfo[];
+  selectedFile: string | null;
+  setSelectedFile: (file: string | null) => void;
   loading: boolean;
   error: Error | null;
 }
@@ -16,6 +18,7 @@ const API_URL = '/api/files';
 
 export const useFileList = (): FileListData => {
   const [files, setFiles] = useState<FileInfo[]>([]);
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -30,6 +33,7 @@ export const useFileList = (): FileListData => {
 
         const data = await response.json();
         setFiles(data.files || []);
+        setSelectedFile(data.selectedFile || null);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Unknown error'));
       } finally {
@@ -40,5 +44,5 @@ export const useFileList = (): FileListData => {
     fetchFiles();
   }, []);
 
-  return { files, loading, error };
+  return { files, selectedFile, setSelectedFile, loading, error };
 };
