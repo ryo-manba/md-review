@@ -209,11 +209,9 @@ export const MarkdownPreview = ({
   return (
     <div
       className={`markdown-with-comments ${isResizing ? 'resizing' : ''} ${isCollapsed ? 'comments-collapsed' : ''}`}
+      style={{ paddingRight: isCollapsed ? '80px' : `${commentsSidebarWidth + 20}px` }}
     >
-      <div
-        className="markdown-container"
-        style={{ paddingRight: isCollapsed ? '0' : `${commentsSidebarWidth + 20}px` }}
-      >
+      <div className="markdown-container">
         <header className="markdown-header">
           <h1>{filename}</h1>
         </header>
