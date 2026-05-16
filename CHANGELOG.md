@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.3](https://github.com/ryo-manba/md-review/compare/v1.3.2...v1.3.3) (2026-05-16)
+
+
+### Bug Fixes
+
+* keep markdown content width stable when comments sidebar toggles ([#28](https://github.com/ryo-manba/md-review/issues/28)) ([d6c42be](https://github.com/ryo-manba/md-review/commit/d6c42be733845d17c586f407d5d3c850bc80f044))
+
 ## [1.3.2](https://github.com/ryo-manba/md-review/compare/v1.3.1...v1.3.2) (2026-02-03)
 
 
