@@ -8,9 +8,9 @@
   flex: 1;
   max-width: 900px;
   padding: 2rem;
-  padding-right: 320px; /* comment sidebar padding - updated dynamically */
   position: relative;
   margin: 0 auto;
+  min-width: 0;
 }
 
 .comments-sidebar {
