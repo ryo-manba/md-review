@@ -16,11 +16,9 @@ jobs:
 
       - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
-          node-version: '22'
+          node-version: '24'
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
-
-      - run: npm install -g npm@latest
 
       - run: pnpm install --frozen-lockfile
 
