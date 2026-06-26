@@ -54,8 +54,7 @@ describe('parseMdContent', () => {
     });
 
     it('strips multiple import/export lines from .mdx', () => {
-      const content =
-        'import A from "./a"\nimport B from "./b"\nexport const x = 1\n\n# Body';
+      const content = 'import A from "./a"\nimport B from "./b"\nexport const x = 1\n\n# Body';
       const { body } = parseMdContent(content, 'file.mdx');
       expect(body).not.toContain('import');
       expect(body).not.toContain('export');
