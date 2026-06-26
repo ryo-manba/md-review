@@ -1,0 +1,33 @@
+---
+title: MDX Sample
+date: 2026-06-26
+author: ryo-manba
+---
+
+import { Button } from './Button'
+import SomeComponent from './SomeComponent'
+
+export const greeting = 'Hello'
+
+# MDX Sample
+
+This is a **MDX** file. JSX imports and exports are stripped, only markdown is rendered.
+
+## Features
+
+- Frontmatter is parsed and shown as metadata
+- `import` / `export` lines are removed
+- JSX components are ignored by react-markdown
+
+## Code Example
+
+```js
+const hello = 'world'
+console.log(hello)
+```
+
+## Table
+
+| Column A | Column B |
+|----------|----------|
+| Value 1  | Value 2  |

@@ -26,7 +26,7 @@ function validatePort(value, name) {
 
 // Check if file has markdown extension
 function isMarkdownFile(filePath) {
-  return filePath.endsWith('.md') || filePath.endsWith('.markdown');
+  return filePath.endsWith('.md') || filePath.endsWith('.markdown') || filePath.endsWith('.mdx');
 }
 
 // Parse arguments

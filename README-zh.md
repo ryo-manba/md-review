@@ -9,7 +9,8 @@
 
 ## Features
 
-- 以原始格式显示 Markdown
+- 以原始格式显示 Markdown 和 MDX
+- 解析并显示 Frontmatter 元数据
 - 为特定行添加注释
 - 编辑现有注释
 - 从树视图中选择文件
@@ -28,7 +29,7 @@ npm install -g md-review
 
 ```sh
 md-review [options]              # 预览当前目录中的所有 Markdown 文件
-md-review <file> [options]       # 预览特定的 Markdown 文件
+md-review <file> [options]       # 预览特定的 Markdown 文件 (.md, .markdown, .mdx)
 md-review <directory> [options]  # 预览特定目录中的 Markdown 文件
 ```
 
@@ -47,6 +48,7 @@ md-review <directory> [options]  # 预览特定目录中的 Markdown 文件
 md-review                        # 预览当前目录中的所有 Markdown 文件
 md-review docs                   # 预览 docs 目录中的 Markdown 文件
 md-review README.md              # 预览 README.md
+md-review docs/guide.mdx         # 预览 MDX 文件
 md-review docs/guide.md --port 8080
 ```
 

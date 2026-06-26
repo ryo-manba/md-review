@@ -9,7 +9,8 @@ Comments can be copied and used as feedback for AI agents.
 
 ## Features
 
-- Display Markdown in its original format
+- Display Markdown and MDX in its original format
+- Frontmatter is parsed and displayed as metadata
 - Add comments to specific lines
 - Edit existing comments
 - Select files from tree view
@@ -28,7 +29,7 @@ npm install -g md-review
 
 ```sh
 md-review [options]              # Browse all markdown files in current directory
-md-review <file> [options]       # Preview a specific markdown file
+md-review <file> [options]       # Preview a specific markdown file (.md, .markdown, .mdx)
 md-review <directory> [options]  # Browse markdown files in a specific directory
 ```
 
@@ -47,6 +48,7 @@ md-review <directory> [options]  # Browse markdown files in a specific directory
 md-review                        # Browse all markdown files in current directory
 md-review docs                   # Browse markdown files in docs directory
 md-review README.md              # Preview README.md
+md-review docs/guide.mdx         # Preview an MDX file
 md-review docs/guide.md --port 8080
 ```
 

@@ -9,7 +9,8 @@ Markdown ファイルにコメントを付けてレビューするための CLI 
 
 ## Features
 
-- Markdown をそのままの形式で表示
+- Markdown / MDX をそのままの形式で表示
+- Frontmatter をメタデータとして解析・表示
 - 特定の行にコメントを残せる
 - 既存のコメントを編集可能
 - ツリービューでファイルを選択
@@ -28,7 +29,7 @@ npm install -g md-review
 
 ```sh
 md-review [options]              # カレントディレクトリのすべてのマークダウンファイルをプレビュー
-md-review <file> [options]       # 特定のマークダウンファイルをプレビュー
+md-review <file> [options]       # 特定のマークダウンファイルをプレビュー (.md, .markdown, .mdx)
 md-review <directory> [options]  # 特定のディレクトリのマークダウンファイルをプレビュー
 ```
 
@@ -47,6 +48,7 @@ md-review <directory> [options]  # 特定のディレクトリのマークダウ
 md-review                        # カレントディレクトリのすべてのマークダウンファイルをプレビュー
 md-review docs                   # docs ディレクトリのマークダウンファイルをプレビュー
 md-review README.md              # README.md をプレビュー
+md-review docs/guide.mdx         # MDX ファイルをプレビュー
 md-review docs/guide.md --port 8080
 ```
 

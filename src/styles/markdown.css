@@ -126,6 +126,35 @@
   margin: 0;
 }
 
+.frontmatter-block {
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0 0;
+  border-top: 1px solid var(--border-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+}
+
+.frontmatter-row {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.frontmatter-row dt {
+  color: var(--text-secondary);
+  font-weight: normal;
+}
+
+.frontmatter-row dt::after {
+  content: ':';
+}
+
+.frontmatter-row dd {
+  margin: 0;
+  color: var(--text-primary);
+}
+
 .markdown-content {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
   font-size: 16px;
