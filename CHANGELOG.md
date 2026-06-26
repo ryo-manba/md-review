@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/ryo-manba/md-review/compare/v1.3.3...v1.4.0) (2026-06-26)
+
+
+### Features
+
+* add MDX file support with frontmatter display ([#32](https://github.com/ryo-manba/md-review/issues/32)) ([485466b](https://github.com/ryo-manba/md-review/commit/485466b9a290c10f20346ea57e9df15a593a0397))
+
 ## [1.3.3](https://github.com/ryo-manba/md-review/compare/v1.3.2...v1.3.3) (2026-05-16)
 
 
