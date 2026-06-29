@@ -2,7 +2,7 @@
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
 import { serveStatic } from '@hono/node-server/serve-static';
-import { readFile, readdir } from 'fs/promises';
+import { readFile, readdir, writeFile, rename, unlink } from 'fs/promises';
 import { basename, join, relative, resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { watch } from 'chokidar';
@@ -57,6 +57,14 @@ const sseClients = new Set();
 // Check if file has markdown extension
 function isMarkdownFile(filename) {
   return filename.endsWith('.md') || filename.endsWith('.markdown') || filename.endsWith('.mdx');
+}
+
+// Security helper: resolve path and prevent traversal
+function resolveSecurePath(requestedPath) {
+  const baseDir = MARKDOWN_FILE_PATH ? dirname(MARKDOWN_FILE_PATH) : BASE_DIR;
+  const fullPath = resolve(baseDir, requestedPath);
+  if (!fullPath.startsWith(resolve(baseDir))) return null;
+  return fullPath;
 }
 
 // Helper function to scan markdown files recursively
@@ -177,16 +185,9 @@ app.get('/api/markdown/:path{.+}', async (c) => {
   const requestedPath = c.req.param('path');
 
   try {
-    // Security check: prevent path traversal
-    const baseDir = MARKDOWN_FILE_PATH ? dirname(MARKDOWN_FILE_PATH) : BASE_DIR;
-    const fullPath = resolve(baseDir, requestedPath);
-    if (!fullPath.startsWith(resolve(baseDir))) {
-      return c.json(
-        {
-          error: 'Invalid file path',
-        },
-        403,
-      );
+    const fullPath = resolveSecurePath(requestedPath);
+    if (!fullPath) {
+      return c.json({ error: 'Invalid file path' }, 403);
     }
 
     const data = await readFile(fullPath, 'utf-8');
@@ -201,6 +202,120 @@ app.get('/api/markdown/:path{.+}', async (c) => {
       500,
     );
   }
+});
+
+// --- Review file endpoints ---
+
+// GET reviews for CLI mode (single file)
+app.get('/api/reviews', async (c) => {
+  if (!MARKDOWN_FILE_PATH) {
+    return c.json({ error: 'Markdown file path not specified' }, 500);
+  }
+  const reviewPath = MARKDOWN_FILE_PATH + '.review.json';
+  try {
+    const data = await readFile(reviewPath, 'utf-8');
+    const parsed = JSON.parse(data);
+    return c.json({ comments: parsed.comments || [], version: parsed.version });
+  } catch (err) {
+    if (err.code === 'ENOENT') return c.json({ comments: [] });
+    return c.json({ error: 'Failed to read review file' }, 500);
+  }
+});
+
+// GET reviews for dev mode (by path)
+app.get('/api/reviews/:path{.+}', async (c) => {
+  const fullPath = resolveSecurePath(c.req.param('path'));
+  if (!fullPath) return c.json({ error: 'Invalid file path' }, 403);
+
+  const reviewPath = fullPath + '.review.json';
+  try {
+    const data = await readFile(reviewPath, 'utf-8');
+    const parsed = JSON.parse(data);
+    return c.json({ comments: parsed.comments || [], version: parsed.version });
+  } catch (err) {
+    if (err.code === 'ENOENT') return c.json({ comments: [] });
+    return c.json({ error: 'Failed to read review file' }, 500);
+  }
+});
+
+// PUT reviews for CLI mode
+app.put('/api/reviews', async (c) => {
+  if (!MARKDOWN_FILE_PATH) {
+    return c.json({ error: 'Markdown file path not specified' }, 500);
+  }
+  try {
+    const body = await c.req.json();
+    if (!Array.isArray(body.comments)) {
+      return c.json({ error: 'comments must be an array' }, 400);
+    }
+    const reviewPath = MARKDOWN_FILE_PATH + '.review.json';
+    const data = JSON.stringify(
+      { version: 1, sourceFile: basename(MARKDOWN_FILE_PATH), comments: body.comments },
+      null,
+      2,
+    );
+    await writeFile(reviewPath + '.tmp', data, 'utf-8');
+    await rename(reviewPath + '.tmp', reviewPath);
+    return c.json({ success: true });
+  } catch (err) {
+    console.error('Error writing review file:', err.message);
+    return c.json({ error: 'Failed to write review file' }, 500);
+  }
+});
+
+// PUT reviews for dev mode (by path)
+app.put('/api/reviews/:path{.+}', async (c) => {
+  const fullPath = resolveSecurePath(c.req.param('path'));
+  if (!fullPath) return c.json({ error: 'Invalid file path' }, 403);
+
+  try {
+    const body = await c.req.json();
+    if (!Array.isArray(body.comments)) {
+      return c.json({ error: 'comments must be an array' }, 400);
+    }
+    const reviewPath = fullPath + '.review.json';
+    const data = JSON.stringify(
+      { version: 1, sourceFile: basename(fullPath), comments: body.comments },
+      null,
+      2,
+    );
+    await writeFile(reviewPath + '.tmp', data, 'utf-8');
+    await rename(reviewPath + '.tmp', reviewPath);
+    return c.json({ success: true });
+  } catch (err) {
+    console.error('Error writing review file:', err.message);
+    return c.json({ error: 'Failed to write review file' }, 500);
+  }
+});
+
+// DELETE reviews for CLI mode
+app.delete('/api/reviews', async (c) => {
+  if (!MARKDOWN_FILE_PATH) {
+    return c.json({ error: 'Markdown file path not specified' }, 500);
+  }
+  try {
+    await unlink(MARKDOWN_FILE_PATH + '.review.json');
+  } catch (err) {
+    if (err.code !== 'ENOENT') {
+      return c.json({ error: 'Failed to delete review file' }, 500);
+    }
+  }
+  return c.json({ success: true });
+});
+
+// DELETE reviews for dev mode (by path)
+app.delete('/api/reviews/:path{.+}', async (c) => {
+  const fullPath = resolveSecurePath(c.req.param('path'));
+  if (!fullPath) return c.json({ error: 'Invalid file path' }, 403);
+
+  try {
+    await unlink(fullPath + '.review.json');
+  } catch (err) {
+    if (err.code !== 'ENOENT') {
+      return c.json({ error: 'Failed to delete review file' }, 500);
+    }
+  }
+  return c.json({ success: true });
 });
 
 // Serve static files from dist directory (for production/CLI mode)
@@ -223,7 +338,9 @@ const SERVER_READY_MESSAGE = 'md-review server started';
 const watchTarget = MARKDOWN_FILE_PATH || BASE_DIR;
 const watchBase = MARKDOWN_FILE_PATH ? dirname(MARKDOWN_FILE_PATH) : BASE_DIR;
 const watcher = watch(watchTarget, {
-  ignored: MARKDOWN_FILE_PATH ? undefined : /(^|[/\\])\..|(node_modules|dist)/,
+  ignored: MARKDOWN_FILE_PATH
+    ? /\.review\.json(\.tmp)?$/
+    : /(^|[/\\])\..|(node_modules|dist)|\.review\.json(\.tmp)?$/,
   persistent: true,
   ignoreInitial: true,
   awaitWriteFinish: {

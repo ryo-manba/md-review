@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useFileList } from '../hooks/useFileList';
 import { useMarkdown } from '../hooks/useMarkdown';
-import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useResizable } from '../hooks/useResizable';
 import { useFileWatch } from '../hooks/useFileWatch';
+import { useReviewFile } from '../hooks/useReviewFile';
 import { FileTree } from './FileTree';
 import { MarkdownPreview } from './MarkdownPreview';
 import { ErrorDisplay } from './ErrorDisplay';
-import { Comment } from './CommentList';
 import { ThemeToggle } from './ThemeToggle';
 import '../styles/devmode.css';
 
@@ -21,10 +20,9 @@ export const DevModeApp = () => {
   } = useFileList();
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [focusSearch, setFocusSearch] = useState<boolean>(false);
-  const [commentsMap, setCommentsMap] = useLocalStorage<Record<string, Comment[]>>(
-    'md-review-comments',
-    {},
-  );
+  const { comments, setComments, saving, saveNow } = useReviewFile({
+    filePath: selectedFile,
+  });
   const {
     content,
     filename,
@@ -172,11 +170,10 @@ export const DevModeApp = () => {
             content={content}
             filename={filename}
             filePath={selectedFile || filename}
-            comments={commentsMap[selectedFile || filename] || []}
-            onCommentsChange={(comments) => {
-              const key = selectedFile || filename;
-              setCommentsMap((prev) => ({ ...prev, [key]: comments }));
-            }}
+            comments={comments}
+            onCommentsChange={setComments}
+            saving={saving}
+            onSaveNow={saveNow}
           />
         ) : (
           <div className="dev-placeholder">

@@ -17,6 +17,8 @@ interface CommentListProps {
   onClose?: () => void;
   onLineClick?: (line: number) => void;
   onEditComment?: (id: string, newText: string) => void;
+  saving?: boolean;
+  onSaveNow?: () => Promise<void>;
 }
 
 export const CommentList = ({
@@ -27,9 +29,12 @@ export const CommentList = ({
   onClose,
   onLineClick,
   onEditComment,
+  saving,
+  onSaveNow,
 }: CommentListProps) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedAll, setCopiedAll] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState('');
 
@@ -172,6 +177,57 @@ export const CommentList = ({
               )}
               <span>Copy All</span>
             </button>
+            {onSaveNow && (
+              <button
+                className={`comment-list-save ${saving ? 'saving' : ''} ${justSaved ? 'saved' : ''}`}
+                onClick={async () => {
+                  await onSaveNow();
+                  setJustSaved(true);
+                  setTimeout(() => setJustSaved(false), 2000);
+                }}
+                title={saving ? 'Saving...' : justSaved ? 'Saved!' : 'Save to disk'}
+                disabled={saving}
+              >
+                {saving ? (
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="spin"
+                  >
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                  </svg>
+                ) : justSaved ? (
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                ) : (
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
+                    <polyline points="17 21 17 13 7 13 7 21" />
+                    <polyline points="7 3 7 8 15 8" />
+                  </svg>
+                )}
+                <span>{saving ? 'Saving...' : justSaved ? 'Saved' : 'Save'}</span>
+              </button>
+            )}
             {onDeleteAll && (
               <button
                 className="comment-list-delete-all"

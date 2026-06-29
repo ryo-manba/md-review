@@ -1,13 +1,12 @@
-import { useState } from 'react';
 import { useMarkdown } from '../hooks/useMarkdown';
 import { useFileWatch } from '../hooks/useFileWatch';
+import { useReviewFile } from '../hooks/useReviewFile';
 import { MarkdownPreview } from './MarkdownPreview';
 import { ErrorDisplay } from './ErrorDisplay';
-import { Comment } from './CommentList';
 
 export const CliModeApp = () => {
   const { content, filename, loading, error, reload } = useMarkdown();
-  const [comments, setComments] = useState<Comment[]>([]);
+  const { comments, setComments, saving, saveNow } = useReviewFile({ filePath: null });
 
   // Watch for file changes and reload
   useFileWatch(() => {
@@ -47,6 +46,8 @@ export const CliModeApp = () => {
       filename={filename}
       comments={comments}
       onCommentsChange={setComments}
+      saving={saving}
+      onSaveNow={saveNow}
     />
   );
 };

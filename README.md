@@ -18,11 +18,12 @@ Comments can be copied and used as feedback for AI agents.
 - Resizable and collapsible sidebars
 - Click line numbers in comments to jump to corresponding content
 - Hot reload when markdown files change
+- Comments persist to `.review.json` files on disk
 
 ## Install
 
 ```sh
-npm install -g md-review
+git clone https://github.com/dfpersonal/md-review.git ~/md-review && cd ~/md-review && pnpm install && pnpm build && npm install -g .
 ```
 
 ## Usage
@@ -72,6 +73,15 @@ md-review docs/guide.md --port 8080
 - `Cmd/Ctrl+Enter` - Submit/Save comment
 - `Escape` - Cancel editing
 - `Cmd+K` - Focus search bar (in directory mode)
+
+## Comment Persistence
+
+Comments are automatically saved to a `.review.json` file alongside the markdown file (e.g. `README.md` → `README.md.review.json`).
+
+- Comments auto-save with a 1-second debounce, or use the **Save** button for an immediate flush
+- Comments reload automatically when you reopen a file
+- Deleting all comments removes the `.review.json` file
+- Any comments previously stored in browser localStorage are migrated on first load
 
 ## Hot Module Replacement
 

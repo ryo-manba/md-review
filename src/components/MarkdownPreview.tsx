@@ -19,6 +19,8 @@ interface MarkdownPreviewProps {
   filePath?: string;
   comments: Comment[];
   onCommentsChange: (comments: Comment[]) => void;
+  saving?: boolean;
+  onSaveNow?: () => Promise<void>;
 }
 
 // Components that add data-line-start attribute to elements
@@ -121,6 +123,8 @@ export const MarkdownPreview = ({
   filePath,
   comments,
   onCommentsChange,
+  saving,
+  onSaveNow,
 }: MarkdownPreviewProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const { isDark } = useDarkMode();
@@ -264,6 +268,8 @@ export const MarkdownPreview = ({
             onClose={toggleCollapse}
             onLineClick={handleLineClick}
             onEditComment={handleEditComment}
+            saving={saving}
+            onSaveNow={onSaveNow}
           />
         </aside>
       )}
