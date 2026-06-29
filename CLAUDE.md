@@ -23,6 +23,31 @@ pnpm fmt               # Prettier format
 pnpm fmt:check         # Check formatting
 ```
 
+## Fork & Upstream Sync
+
+This repo is a fork of [`ryo-manba/md-review`](https://github.com/ryo-manba/md-review). Our main divergence from upstream is **file-based comment persistence** (comments saved to `.review.json` alongside each markdown file).
+
+To check for and pull in upstream improvements:
+
+```bash
+# One-time: add the upstream remote (origin is dfpersonal/md-review)
+git remote add upstream https://github.com/ryo-manba/md-review.git
+
+# Each sync:
+git fetch upstream
+git log --oneline --no-merges main..upstream/main   # what upstream has that we don't
+git log --oneline --no-merges upstream/main..main   # our fork-only commits
+
+# Pull a specific commit, preserving authorship + a cherry-pick trailer:
+git cherry-pick -x <sha>
+```
+
+Notes when syncing:
+
+- Skip upstream's release-please version-bump / CHANGELOG commits — manage our own versioning.
+- Conflicts cluster in `MarkdownPreview.tsx`, `server/index.js`, `markdown.css`, and the READMEs, since that's where the `.review.json` work lives.
+- After a cherry-pick, run `pnpm build` (typecheck + build) and `pnpm test` before pushing.
+
 ## Architecture
 
 This is a CLI tool for reviewing Markdown files with inline comments in the browser.
@@ -46,7 +71,7 @@ Mode detection happens in `App.tsx` via `/api/files` endpoint availability.
 ### Key Components
 
 - `MarkdownPreview`: Main preview component with line-by-line rendering
-- `CommentList`: Manages inline comments (persisted to localStorage)
+- `CommentList`: Manages inline comments (persisted to `.review.json` via `useReviewFile`; legacy localStorage migrated on first load)
 - `SelectionPopover`: Text selection UI for adding comments
 - `FileTree`: Directory browser with search
 
@@ -55,4 +80,4 @@ Mode detection happens in `App.tsx` via `/api/files` endpoint availability.
 1. CLI parses args → sets `MARKDOWN_FILE_PATH` or `BASE_DIR` env vars
 2. Server reads files from these paths
 3. SSE connection (`/api/watch`) enables hot reload on file changes
-4. Comments stored in localStorage, keyed by file path
+4. Comments persist to a `.review.json` file alongside each markdown file (debounced auto-save), served/written by the server; legacy localStorage data is migrated on first load
